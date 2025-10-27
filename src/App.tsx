@@ -1,22 +1,22 @@
 import React, { useState, useEffect, FC } from 'react';
 import { Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
-import TabButton from '@/components/ui/TabButton';
-import ContextSummary from '@/components/ui/ContextSummary';
-import FoundationAndPersonas from '@/components/tabs/FoundationAndPersonas';
-import ContentStudio from '@/components/tabs/ContentStudio';
-import ProductDeveloper from '@/components/tabs/ProductDeveloper';
-import MarketingBrainstorm from '@/components/tabs/MarketingBrainstorm';
-import EditorialCalendar from '@/components/tabs/EditorialCalendar';
-import CompetitorAnalyzer from '@/components/tabs/CompetitorAnalyzer';
-import FunnelBuilder from '@/components/tabs/funnel/FunnelBuilder';
-import VideoAnalyzer from '@/components/tabs/VideoAnalyzer';
-import SeoAssistant from '@/components/tabs/SeoAssistant';
-import ImageGenerator from '@/components/tabs/ImageGenerator';
-import LandingPage from '@/components/landing/LandingPage';
-import ProfileOptimizer from '@/components/tabs/ProfileOptimizer';
-import ApiKeySetup from '@/components/setup/ApiKeySetup';
-import Login from '@/pages/Login';
+import { supabase } from '@/src/integrations/supabase/client';
+import TabButton from './components/ui/TabButton';
+import ContextSummary from './components/ui/ContextSummary';
+import FoundationAndPersonas from './components/tabs/FoundationAndPersonas';
+import ContentStudio from './components/tabs/ContentStudio';
+import ProductDeveloper from './components/tabs/ProductDeveloper';
+import MarketingBrainstorm from './components/tabs/MarketingBrainstorm';
+import EditorialCalendar from './components/tabs/EditorialCalendar';
+import CompetitorAnalyzer from './components/tabs/CompetitorAnalyzer';
+import FunnelBuilder from './components/tabs/funnel/FunnelBuilder';
+import VideoAnalyzer from './components/tabs/VideoAnalyzer';
+import SeoAssistant from './components/tabs/SeoAssistant';
+import ImageGenerator from './components/tabs/ImageGenerator';
+import LandingPage from './components/landing/LandingPage';
+import ProfileOptimizer from './components/tabs/ProfileOptimizer';
+import ApiKeySetup from './components/setup/ApiKeySetup';
+import Login from './src/pages/Login';
 import {
     IdentificationIcon,
     CubeIcon,
@@ -32,8 +32,8 @@ import {
     MagnifyingGlassIcon,
     PhotoIcon,
     UserCircleIcon,
-} from '@/components/icons/Icons';
-import { AppContext, BrandDna, HistoryState, HistoryItem } from '@/types';
+} from './components/icons/Icons';
+import { AppContext, BrandDna, HistoryState, HistoryItem } from './types';
 
 type Tab =
     | 'dna'
