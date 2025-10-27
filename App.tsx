@@ -1,4 +1,6 @@
 import React from 'react';
+import { Session } from '@supabase/supabase-js';
+import { supabase } from './integrations/supabase/client';
 import TabButton from './components/ui/TabButton';
 import ContextSummary from './components/ui/ContextSummary';
 import FoundationAndPersonas from './components/tabs/FoundationAndPersonas';
@@ -14,6 +16,7 @@ import ImageGenerator from './components/tabs/ImageGenerator';
 import LandingPage from './components/landing/LandingPage';
 import ProfileOptimizer from './components/tabs/ProfileOptimizer';
 import ApiKeySetup from './components/setup/ApiKeySetup';
+import Login from './pages/Login';
 import {
     IdentificationIcon,
     CubeIcon,
@@ -45,7 +48,7 @@ type Tab =
     | 'seo'
     | 'image';
 
-type AppState = 'landing' | 'apiKey' | 'main';
+type AppState = 'landing' | 'main';
     
 const APP_STATE_KEY = 'brandingCopilotAppState_v2';
 const HISTORY_KEY = 'brandingCopilotHistory_v2';
@@ -54,6 +57,14 @@ export const API_KEY_STORAGE_KEY = 'brandingCopilotApiKey_v1';
 
 const App: React.FC = () => {
     const [appState, setAppState] = React.useState<AppState>('landing');
+    const [session, setSession] = React.useState<Session | null>(null);
+    const [apiKey, setApiKey] = React.useState<string | null>(() => {
+        try {
+            return localStorage.getItem(API_KEY_STORAGE_KEY);
+        } catch {
+            return null;
+        }
+    });
     const [activeTab, setActiveTab] = React.useState<Tab>('dna');
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [prefillData, setPrefillData] = React.useState<{ tab: string; data: any } | null>(null);
@@ -76,14 +87,19 @@ const App: React.FC = () => {
     const [brandDna, setBrandDna] = React.useState<BrandDna | null>(null);
 
     React.useEffect(() => {
-        try {
-            const savedApiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
-            if (savedApiKey) {
-                setAppState('main');
-            } else {
-                setAppState('landing');
-            }
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+        });
 
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
+    React.useEffect(() => {
+        try {
             const savedState = localStorage.getItem(APP_STATE_KEY);
             if (savedState) {
                 const { activeTab: savedActiveTab, activeBrandId: savedActiveBrandId } = JSON.parse(savedState);
@@ -98,9 +114,8 @@ const App: React.FC = () => {
             }
         } catch (error) {
             console.error("Could not load app state from localStorage", error);
-            setAppState('landing');
         }
-    }, []);
+    }, [history.dna]);
 
     React.useEffect(() => {
         try {
@@ -126,7 +141,7 @@ const App: React.FC = () => {
     const handleKeySubmit = (key: string) => {
         try {
             localStorage.setItem(API_KEY_STORAGE_KEY, key);
-            setAppState('main');
+            setApiKey(key);
         } catch (error) {
             console.error("Could not save API key to localStorage", error);
         }
@@ -134,8 +149,7 @@ const App: React.FC = () => {
 
     const handleChangeApiKey = () => {
         localStorage.removeItem(API_KEY_STORAGE_KEY);
-        setActiveBrand(null);
-        setAppState('apiKey');
+        setApiKey(null);
     };
 
     const setActiveBrand = (item: HistoryItem | null) => {
@@ -274,10 +288,14 @@ const App: React.FC = () => {
     ];
     
     if (appState === 'landing') {
-        return <LandingPage onStart={() => setAppState('apiKey')} />;
+        return <LandingPage onStart={() => setAppState('main')} />;
     }
 
-    if (appState === 'apiKey') {
+    if (!session) {
+        return <Login />;
+    }
+
+    if (!apiKey) {
         return <ApiKeySetup onKeySubmit={handleKeySubmit} />;
     }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { AppContext } from '../../types';
+import { supabase } from '../../integrations/supabase/client';
 
 interface ContextSummaryProps {
     context: AppContext;
@@ -7,6 +8,10 @@ interface ContextSummaryProps {
 }
 
 const ContextSummary: React.FC<ContextSummaryProps> = ({ context, onChangeApiKey }) => {
+    const handleSignOut = async () => {
+        await supabase.auth.signOut();
+    };
+
     return (
         <div className="p-4 bg-neutral-950/50 border-t border-neutral-800">
             <div className="flex justify-between items-center mb-2">
@@ -23,12 +28,20 @@ const ContextSummary: React.FC<ContextSummaryProps> = ({ context, onChangeApiKey
                     Crie um DNA de Marca para começar.
                 </div>
             )}
-            <button
-                onClick={onChangeApiKey}
-                className="text-xs text-neutral-500 hover:text-blue-400 w-full text-center mt-3 p-1"
-            >
-                Trocar Chave de API
-            </button>
+            <div className="flex items-center justify-between mt-3">
+                <button
+                    onClick={onChangeApiKey}
+                    className="text-xs text-neutral-500 hover:text-blue-400 p-1"
+                >
+                    Trocar Chave de API
+                </button>
+                <button
+                    onClick={handleSignOut}
+                    className="text-xs text-neutral-500 hover:text-red-400 p-1"
+                >
+                    Sair
+                </button>
+            </div>
         </div>
     );
 };

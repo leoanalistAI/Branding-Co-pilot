@@ -9,13 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/genai": "^1.26.0",
+    "@splinetool/react-spline": "^4.0.0",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.76.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.3.19",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "@google/genai": "^1.26.0",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^2.4.0",
-    "framer-motion": "^11.3.19",
-    "@splinetool/react-spline": "^4.0.0"
+    "tailwind-merge": "^2.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
