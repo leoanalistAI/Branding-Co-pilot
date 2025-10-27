@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { generateSeoAnalysisService } from '../../services/geminiService';
 import { AppContext, SeoAnalysisResult, Source, HistoryItem } from '../../types';

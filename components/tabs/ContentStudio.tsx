@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { generateCopyService, createScriptService, generateCarouselService } from '../../services/geminiService';
 import { AppContext, CopywritingResult, ScriptResult, CarouselResult, Source, HistoryItem } from '../../types';

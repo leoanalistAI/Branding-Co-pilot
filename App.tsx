@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/src/integrations/supabase/client';
 import TabButton from './components/ui/TabButton';
@@ -56,21 +56,21 @@ export const API_KEY_STORAGE_KEY = 'brandingCopilotApiKey_v1';
 
 
 const App: React.FC = () => {
-    const [appState, setAppState] = React.useState<AppState>('landing');
-    const [session, setSession] = React.useState<Session | null>(null);
-    const [apiKey, setApiKey] = React.useState<string | null>(() => {
+    const [appState, setAppState] = useState<AppState>('landing');
+    const [session, setSession] = useState<Session | null>(null);
+    const [apiKey, setApiKey] = useState<string | null>(() => {
         try {
             return localStorage.getItem(API_KEY_STORAGE_KEY);
         } catch {
             return null;
         }
     });
-    const [activeTab, setActiveTab] = React.useState<Tab>('dna');
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-    const [prefillData, setPrefillData] = React.useState<{ tab: string; data: any } | null>(null);
-    const [activeBrandId, setActiveBrandId] = React.useState<string | null>(null);
+    const [activeTab, setActiveTab] = useState<Tab>('dna');
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [prefillData, setPrefillData] = useState<{ tab: string; data: any } | null>(null);
+    const [activeBrandId, setActiveBrandId] = useState<string | null>(null);
 
-    const [history, setHistory] = React.useState<HistoryState>(() => {
+    const [history, setHistory] = useState<HistoryState>(() => {
         try {
             const savedHistory = localStorage.getItem(HISTORY_KEY);
             const parsed = savedHistory ? JSON.parse(savedHistory) : null;
@@ -84,9 +84,9 @@ const App: React.FC = () => {
         }
     });
     
-    const [brandDna, setBrandDna] = React.useState<BrandDna | null>(null);
+    const [brandDna, setBrandDna] = useState<BrandDna | null>(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
         });
@@ -98,7 +98,7 @@ const App: React.FC = () => {
         return () => subscription.unsubscribe();
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         try {
             const savedState = localStorage.getItem(APP_STATE_KEY);
             if (savedState) {
@@ -117,7 +117,7 @@ const App: React.FC = () => {
         }
     }, [history.dna]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         try {
             const stateToSave = {
                 activeTab,
@@ -130,7 +130,7 @@ const App: React.FC = () => {
     }, [activeTab, activeBrandId]);
 
 
-    React.useEffect(() => {
+    useEffect(() => {
         try {
             localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
         } catch (error) {
@@ -243,7 +243,7 @@ const App: React.FC = () => {
         clearHistory: clearHistory,
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (isSidebarOpen) {
             document.body.style.overflow = 'hidden';
         } else {

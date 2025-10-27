@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { optimizeProfileService } from '../../services/geminiService';
 import { AppContext, OptimizedProfile, HistoryItem } from '../../types';

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { brainstormMarketingIdeasService } from '../../services/geminiService';
 import { AppContext, BrainstormIdea, Source, HistoryItem } from '../../types';
