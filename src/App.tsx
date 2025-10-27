@@ -3,20 +3,20 @@ import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/src/integrations/supabase/client';
 import TabButton from '@/components/ui/TabButton';
 import ContextSummary from '@/components/ui/ContextSummary';
-import FoundationAndPersonas from '@/components/tabs/FoundationAndPersonas';
-import ContentStudio from '@/components/tabs/ContentStudio';
-import ProductDeveloper from '@/components/tabs/ProductDeveloper';
-import MarketingBrainstorm from '@/components/tabs/MarketingBrainstorm';
-import EditorialCalendar from '@/components/tabs/EditorialCalendar';
-import CompetitorAnalyzer from '@/components/tabs/CompetitorAnalyzer';
-import FunnelBuilder from '@/components/tabs/funnel/FunnelBuilder';
-import VideoAnalyzer from '@/components/tabs/VideoAnalyzer';
-import SeoAssistant from '@/components/tabs/SeoAssistant';
-import ImageGenerator from '@/components/tabs/ImageGenerator';
+import FoundationAndPersonas from '@/src/components/tabs/FoundationAndPersonas';
+import ContentStudio from '@/src/components/tabs/ContentStudio';
+import ProductDeveloper from '@/src/components/tabs/ProductDeveloper';
+import MarketingBrainstorm from '@/src/components/tabs/MarketingBrainstorm';
+import EditorialCalendar from '@/src/components/tabs/EditorialCalendar';
+import CompetitorAnalyzer from '@/src/components/tabs/CompetitorAnalyzer';
+import FunnelBuilder from '@/src/components/tabs/funnel/FunnelBuilder';
+import VideoAnalyzer from '@/src/components/tabs/VideoAnalyzer';
+import SeoAssistant from '@/src/components/tabs/SeoAssistant';
+import ImageGenerator from '@/src/components/tabs/ImageGenerator';
 import LandingPage from '@/components/landing/LandingPage';
-import ProfileOptimizer from '@/components/tabs/ProfileOptimizer';
+import ProfileOptimizer from '@/src/components/tabs/ProfileOptimizer';
 import ApiKeySetup from '@/components/setup/ApiKeySetup';
-import Login from '@/pages/Login';
+import Login from '@/src/pages/Login';
 import {
     IdentificationIcon,
     CubeIcon,
