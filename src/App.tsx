@@ -164,64 +164,104 @@ const App: FC = () => {
 
     const addToHistory = (tab: string, item: HistoryItem) => {
         setHistory(prev => {
-            const newHistory = JSON.parse(JSON.stringify(prev));
             if (tab === 'dna') {
-                const existingIndex = newHistory.dna.findIndex(h => h.id === item.id);
+                const existingIndex = prev.dna.findIndex(h => h.id === item.id);
+                let newDna;
                 if (existingIndex > -1) {
-                     newHistory.dna[existingIndex] = item;
+                    newDna = [...prev.dna];
+                    newDna[existingIndex] = item;
                 } else {
-                    newHistory.dna.unshift(item);
+                    newDna = [item, ...prev.dna];
                 }
-            } else if (activeBrandId) {
-                if (!newHistory.brandHistories[activeBrandId]) {
-                    newHistory.brandHistories[activeBrandId] = {};
-                }
-                if (!newHistory.brandHistories[activeBrandId][tab]) {
-                    newHistory.brandHistories[activeBrandId][tab] = [];
-                }
-                const existingIndex = newHistory.brandHistories[activeBrandId][tab].findIndex(h => h.id === item.id);
-                 if (existingIndex > -1) {
-                    newHistory.brandHistories[activeBrandId][tab][existingIndex] = item;
-                 } else {
-                    newHistory.brandHistories[activeBrandId][tab].unshift(item);
-                 }
-                newHistory.brandHistories[activeBrandId][tab] = newHistory.brandHistories[activeBrandId][tab].slice(0, 20);
+                return { ...prev, dna: newDna };
             }
-            return newHistory;
+    
+            if (activeBrandId) {
+                const brandHistory = prev.brandHistories[activeBrandId] || {};
+                const tabHistory = brandHistory[tab] || [];
+                const existingIndex = tabHistory.findIndex(h => h.id === item.id);
+                let newTabHistory;
+                if (existingIndex > -1) {
+                    newTabHistory = [...tabHistory];
+                    newTabHistory[existingIndex] = item;
+                } else {
+                    newTabHistory = [item, ...tabHistory];
+                }
+    
+                return {
+                    ...prev,
+                    brandHistories: {
+                        ...prev.brandHistories,
+                        [activeBrandId]: {
+                            ...brandHistory,
+                            [tab]: newTabHistory.slice(0, 20),
+                        },
+                    },
+                };
+            }
+            return prev;
         });
     };
     
     const removeFromHistory = (tab: string, itemId: string) => {
         setHistory(prev => {
-            const newHistory = { ...prev };
             if (tab === 'dna') {
-                newHistory.dna = newHistory.dna.filter(item => item.id !== itemId);
-                if (newHistory.brandHistories[itemId]) {
-                    delete newHistory.brandHistories[itemId];
-                }
+                const newDna = prev.dna.filter(item => item.id !== itemId);
+                const { [itemId]: _, ...remainingBrandHistories } = prev.brandHistories;
+    
                 if (activeBrandId === itemId) {
                     setActiveBrandId(null);
                     setBrandDna(null);
                 }
-            } else if (activeBrandId && newHistory.brandHistories[activeBrandId]?.[tab]) {
-                newHistory.brandHistories[activeBrandId][tab] = newHistory.brandHistories[activeBrandId][tab].filter(item => item.id !== itemId);
+    
+                return {
+                    ...prev,
+                    dna: newDna,
+                    brandHistories: remainingBrandHistories,
+                };
             }
-            return { ...newHistory };
+    
+            if (activeBrandId && prev.brandHistories[activeBrandId]?.[tab]) {
+                const brandHistory = prev.brandHistories[activeBrandId];
+                const newTabHistory = brandHistory[tab].filter(item => item.id !== itemId);
+    
+                return {
+                    ...prev,
+                    brandHistories: {
+                        ...prev.brandHistories,
+                        [activeBrandId]: {
+                            ...brandHistory,
+                            [tab]: newTabHistory,
+                        },
+                    },
+                };
+            }
+            return prev;
         });
     };
     
     const clearHistory = (tab: string) => {
-         setHistory(prev => {
-            const newHistory = { ...prev };
+        setHistory(prev => {
             if (tab === 'dna') {
-                newHistory.dna = [];
-                newHistory.brandHistories = {};
                 setActiveBrandId(null);
                 setBrandDna(null);
-            } else if (activeBrandId && newHistory.brandHistories[activeBrandId]?.[tab]) {
-                newHistory.brandHistories[activeBrandId][tab] = [];
+                return { dna: [], brandHistories: {} };
             }
-            return { ...newHistory };
+    
+            if (activeBrandId && prev.brandHistories[activeBrandId]?.[tab]) {
+                const brandHistory = prev.brandHistories[activeBrandId];
+                return {
+                    ...prev,
+                    brandHistories: {
+                        ...prev.brandHistories,
+                        [activeBrandId]: {
+                            ...brandHistory,
+                            [tab]: [],
+                        },
+                    },
+                };
+            }
+            return prev;
         });
     };
 
