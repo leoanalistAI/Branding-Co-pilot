@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FC, FormEvent } from 'react';
-import { brainstormMarketingIdeasService } from '@/services/aiService';
+import { brainstormMarketingIdeasService } from '@/src/services/aiService';
 import { AppContext, BrainstormIdea, Source, HistoryItem } from '@/types';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC } from 'react';
 import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '@/types';
-import { generateFunnelStageSuggestionsService } from '@/services/aiService';
+import { generateFunnelStageSuggestionsService } from '@/src/services/aiService';
 import Spinner from '@/components/ui/Spinner';
 import { XMarkIcon, SparklesIcon } from '@/components/icons/Icons';
 import Sources from '@/components/ui/Sources';

@@ -19,7 +19,7 @@ import {
     CarouselResult,
     Source
 } from '@/types';
-import { API_KEY_STORAGE_KEY } from "@/App";
+import { API_KEY_STORAGE_KEY } from "@/src/App";
 import * as Prompts from './ai/prompts';
 
 const getAiClient = (): GoogleGenAI => {

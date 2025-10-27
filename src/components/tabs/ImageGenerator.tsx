@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
-import { generateImageService, editImageService } from '@/services/aiService';
+import { generateImageService, editImageService } from '@/src/services/aiService';
 import { AppContext, ImageResult, HistoryItem } from '@/types';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';

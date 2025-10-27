@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { AppContext } from '../../types';
+import { AppContext } from '@/types';
 import { supabase } from '@/src/integrations/supabase/client';
 
 interface ContextSummaryProps {

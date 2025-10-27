@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FC, FormEvent } from 'react';
-import { generateCopyService, createScriptService, generateCarouselService } from '@/services/aiService';
+import { generateCopyService, createScriptService, generateCarouselService } from '@/src/services/aiService';
 import { AppContext, CopywritingResult, ScriptResult, CarouselResult, Source, HistoryItem } from '@/types';
 import Button from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';

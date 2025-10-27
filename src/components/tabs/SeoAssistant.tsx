@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FC, FormEvent } from 'react';
-import { generateSeoAnalysisService } from '@/services/aiService';
+import { generateSeoAnalysisService } from '@/src/services/aiService';
 import { AppContext, SeoAnalysisResult, Source, HistoryItem } from '@/types';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';

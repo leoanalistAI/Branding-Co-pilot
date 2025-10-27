@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
 import { AppContext, VideoAnalysisResult, HistoryItem } from '@/types';
-import { analyzeVideoService } from '@/services/aiService';
+import { analyzeVideoService } from '@/src/services/aiService';
 import { fileToBase64, downloadAsMarkdown } from '@/utils/fileUtils';
 import Button from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';

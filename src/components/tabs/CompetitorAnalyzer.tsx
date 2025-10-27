@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FC, FormEvent } from 'react';
-import { analyzeCompetitorService, findPeersService } from '@/services/aiService';
+import { analyzeCompetitorService, findPeersService } from '@/src/services/aiService';
 import { AppContext, CompetitorAnalysis, Source, HistoryItem, FoundCompetitor } from '@/types';
 import Button from '@/components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
