@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { brainstormMarketingIdeasService } from '../../services/geminiService';
 import { AppContext, BrainstormIdea, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -15,15 +15,15 @@ interface MarketingBrainstormProps {
 }
 
 const MarketingBrainstorm: React.FC<MarketingBrainstormProps> = ({ appContext, history }) => {
-    const [topic, setTopic] = useState('');
-    const [useGlobalContext, setUseGlobalContext] = useState(true);
-    const [ideas, setIdeas] = useState<BrainstormIdea[] | null>(null);
-    const [sources, setSources] = useState<Source[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [topic, setTopic] = React.useState('');
+    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
+    const [ideas, setIdeas] = React.useState<BrainstormIdea[] | null>(null);
+    const [sources, setSources] = React.useState<Source[]>([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
 
     // Clear results when active brand changes
-    useEffect(() => {
+    React.useEffect(() => {
         setIdeas(null);
         setSources([]);
     }, [appContext.activeBrandId]);

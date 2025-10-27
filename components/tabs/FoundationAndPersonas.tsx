@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { generateBrandDnaService, generateAudienceAvatarService } from '../../services/geminiService';
 import { AppContext, BrandDna, AudienceAvatar, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -59,25 +59,25 @@ const archetypes = {
 
 
 const FoundationAndPersonas: React.FC<FoundationAndPersonasProps> = ({ appContext }) => {
-    const [name, setName] = useState('');
-    const [purpose, setPurpose] = useState('');
-    const [expertise, setExpertise] = useState('');
-    const [audience, setAudience] = useState('');
-    const [transformation, setTransformation] = useState('');
-    const [personality, setPersonality] = useState('Profissional e Confiável');
+    const [name, setName] = React.useState('');
+    const [purpose, setPurpose] = React.useState('');
+    const [expertise, setExpertise] = React.useState('');
+    const [audience, setAudience] = React.useState('');
+    const [transformation, setTransformation] = React.useState('');
+    const [personality, setPersonality] = React.useState('Profissional e Confiável');
     
-    const [selectedArchetype, setSelectedArchetype] = useState<Archetype | null>(null);
+    const [selectedArchetype, setSelectedArchetype] = React.useState<Archetype | null>(null);
 
-    const [brandDnaResult, setBrandDnaResult] = useState<BrandDna | null>(null);
-    const [avatarResult, setAvatarResult] = useState<AudienceAvatar | null>(null);
-    const [dnaSources, setDnaSources] = useState<Source[]>([]);
-    const [avatarSources, setAvatarSources] = useState<Source[]>([]);
-    const [isLoadingDna, setIsLoadingDna] = useState(false);
-    const [isLoadingAvatar, setIsLoadingAvatar] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
+    const [brandDnaResult, setBrandDnaResult] = React.useState<BrandDna | null>(null);
+    const [avatarResult, setAvatarResult] = React.useState<AudienceAvatar | null>(null);
+    const [dnaSources, setDnaSources] = React.useState<Source[]>([]);
+    const [avatarSources, setAvatarSources] = React.useState<Source[]>([]);
+    const [isLoadingDna, setIsLoadingDna] = React.useState(false);
+    const [isLoadingAvatar, setIsLoadingAvatar] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
+    const [activeHistoryId, setActiveHistoryId] = React.useState<string | null>(null);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (appContext.brandDna && appContext.activeBrandId) {
             setBrandDnaResult(appContext.brandDna);
             setActiveHistoryId(appContext.activeBrandId);

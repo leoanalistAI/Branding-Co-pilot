@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { analyzeCompetitorService, findPeersService } from '../../services/geminiService';
 import { AppContext, CompetitorAnalysis, Source, HistoryItem, FoundCompetitor } from '../../types';
 import Button from '../ui/Button';
@@ -16,21 +16,21 @@ interface CompetitorAnalyzerProps {
 }
 
 const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, history }) => {
-    const [competitorUrl, setCompetitorUrl] = useState('');
-    const [useGlobalContext, setUseGlobalContext] = useState(true);
+    const [competitorUrl, setCompetitorUrl] = React.useState('');
+    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
     
-    const [result, setResult] = useState<CompetitorAnalysis | null>(null);
-    const [sources, setSources] = useState<Source[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [result, setResult] = React.useState<CompetitorAnalysis | null>(null);
+    const [sources, setSources] = React.useState<Source[]>([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
 
-    const [foundPeers, setFoundPeers] = useState<FoundCompetitor[] | null>(null);
-    const [isFinding, setIsFinding] = useState(false);
-    const [findError, setFindError] = useState<string | null>(null);
+    const [foundPeers, setFoundPeers] = React.useState<FoundCompetitor[] | null>(null);
+    const [isFinding, setIsFinding] = React.useState(false);
+    const [findError, setFindError] = React.useState<string | null>(null);
 
 
     // Clear results when active brand changes
-    useEffect(() => {
+    React.useEffect(() => {
         setResult(null);
         setSources([]);
         setFoundPeers(null);

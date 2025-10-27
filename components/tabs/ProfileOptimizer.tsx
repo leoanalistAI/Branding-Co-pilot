@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { optimizeProfileService } from '../../services/geminiService';
 import { AppContext, OptimizedProfile, HistoryItem } from '../../types';
 import { fileToBase64, downloadAsMarkdown } from '../../utils/fileUtils';
@@ -14,17 +14,17 @@ interface ProfileOptimizerProps {
 }
 
 const ProfileOptimizer: React.FC<ProfileOptimizerProps> = ({ appContext, history }) => {
-    const [currentBio, setCurrentBio] = useState('');
-    const [platform, setPlatform] = useState('Instagram');
-    const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const [useGlobalContext, setUseGlobalContext] = useState(true);
-    const [result, setResult] = useState<OptimizedProfile | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [currentBio, setCurrentBio] = React.useState('');
+    const [platform, setPlatform] = React.useState('Instagram');
+    const [imageFile, setImageFile] = React.useState<File | null>(null);
+    const [imagePreview, setImagePreview] = React.useState<string | null>(null);
+    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
+    const [result, setResult] = React.useState<OptimizedProfile | null>(null);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
     
-    useEffect(() => {
+    React.useEffect(() => {
         setResult(null);
         setImageFile(null);
         setImagePreview(null);

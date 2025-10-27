@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { AppContext, VideoAnalysisResult, HistoryItem } from '../../types';
 import { analyzeVideoService } from '../../services/geminiService';
 import { fileToBase64, downloadAsMarkdown } from '../../utils/fileUtils';
@@ -14,16 +14,16 @@ interface VideoAnalyzerProps {
 }
 
 const VideoAnalyzer: React.FC<VideoAnalyzerProps> = ({ appContext, history }) => {
-    const [videoFile, setVideoFile] = useState<File | null>(null);
-    const [userPrompt, setUserPrompt] = useState('');
-    const [useGlobalContext, setUseGlobalContext] = useState(true);
-    const [result, setResult] = useState<VideoAnalysisResult | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [videoFile, setVideoFile] = React.useState<File | null>(null);
+    const [userPrompt, setUserPrompt] = React.useState('');
+    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
+    const [result, setResult] = React.useState<VideoAnalysisResult | null>(null);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     // Clear results when active brand changes
-    useEffect(() => {
+    React.useEffect(() => {
         setResult(null);
     }, [appContext.activeBrandId]);
 

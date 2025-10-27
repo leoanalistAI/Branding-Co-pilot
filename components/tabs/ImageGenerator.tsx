@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { generateImageService, editImageService } from '../../services/geminiService';
 import { AppContext, ImageResult, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -14,17 +14,17 @@ interface ImageGeneratorProps {
 }
 
 const ImageGenerator: React.FC<ImageGeneratorProps> = ({ appContext, history }) => {
-    const [prompt, setPrompt] = useState('');
-    const [aspectRatio, setAspectRatio] = useState('1:1');
-    const [result, setResult] = useState<ImageResult | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [referenceImageFile, setReferenceImageFile] = useState<File | null>(null);
-    const [referenceImagePreview, setReferenceImagePreview] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [prompt, setPrompt] = React.useState('');
+    const [aspectRatio, setAspectRatio] = React.useState('1:1');
+    const [result, setResult] = React.useState<ImageResult | null>(null);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
+    const [referenceImageFile, setReferenceImageFile] = React.useState<File | null>(null);
+    const [referenceImagePreview, setReferenceImagePreview] = React.useState<string | null>(null);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     // Clear results when active brand changes
-    useEffect(() => {
+    React.useEffect(() => {
         setResult(null);
     }, [appContext.activeBrandId]);
 

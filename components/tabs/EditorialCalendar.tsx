@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { createEditorialCalendarService } from '../../services/geminiService';
 import { AppContext, EditorialCalendarPost, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -15,17 +15,17 @@ interface EditorialCalendarProps {
 }
 
 const EditorialCalendar: React.FC<EditorialCalendarProps> = ({ appContext, history }) => {
-    const [theme, setTheme] = useState('');
-    const [platforms, setPlatforms] = useState<string[]>(['Instagram', 'Blog']);
-    const [numPosts, setNumPosts] = useState(5);
-    const [useGlobalContext, setUseGlobalContext] = useState(true);
-    const [posts, setPosts] = useState<EditorialCalendarPost[] | null>(null);
-    const [sources, setSources] = useState<Source[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [theme, setTheme] = React.useState('');
+    const [platforms, setPlatforms] = React.useState<string[]>(['Instagram', 'Blog']);
+    const [numPosts, setNumPosts] = React.useState(5);
+    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
+    const [posts, setPosts] = React.useState<EditorialCalendarPost[] | null>(null);
+    const [sources, setSources] = React.useState<Source[]>([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
 
     // Clear results when active brand changes
-    useEffect(() => {
+    React.useEffect(() => {
         setPosts(null);
         setSources([]);
     }, [appContext.activeBrandId]);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { generateCopyService, createScriptService, generateCarouselService } from '../../services/geminiService';
 import { AppContext, CopywritingResult, ScriptResult, CarouselResult, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -28,33 +28,33 @@ const RadioPill = ({ label, value, checked, onChange }: { label: string, value: 
 
 const ContentStudio: React.FC<ContentStudioProps> = ({ appContext, history }) => {
     // Main type
-    const [contentType, setContentType] = useState<ContentType>('Post');
+    const [contentType, setContentType] = React.useState<ContentType>('Post');
 
     // Sub-types
-    const [videoType, setVideoType] = useState('Vídeo Curto (Reels/Shorts)');
-    const [postType, setPostType] = useState('Blog');
-    const [copyType, setCopySubtype] = useState('Anúncio');
-    const [carouselPlatform, setCarouselPlatform] = useState('Instagram');
+    const [videoType, setVideoType] = React.useState('Vídeo Curto (Reels/Shorts)');
+    const [postType, setPostType] = React.useState('Blog');
+    const [copyType, setCopySubtype] = React.useState('Anúncio');
+    const [carouselPlatform, setCarouselPlatform] = React.useState('Instagram');
     
     // Common fields
-    const [topic, setTopic] = useState('');
-    const [toneOfVoice, setToneOfVoice] = useState('Persuasivo');
+    const [topic, setTopic] = React.useState('');
+    const [toneOfVoice, setToneOfVoice] = React.useState('Persuasivo');
     
     // Script fields
-    const [title, setTitle] = useState('');
-    const [hook, setHook] = useState('');
+    const [title, setTitle] = React.useState('');
+    const [hook, setHook] = React.useState('');
     
     // Carousel fields
-    const [numSlides, setNumSlides] = useState(5);
+    const [numSlides, setNumSlides] = React.useState(5);
 
     // General state
-    const [result, setResult] = useState<ResultType | null>(null);
-    const [sources, setSources] = useState<Source[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [useGlobalContext, setUseGlobalContext] = useState(true);
+    const [result, setResult] = React.useState<ResultType | null>(null);
+    const [sources, setSources] = React.useState<Source[]>([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
+    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (appContext.prefillData && appContext.prefillData.tab === 'contentStudio') {
             const { topic } = appContext.prefillData.data;
             setContentType('Post');
@@ -65,7 +65,7 @@ const ContentStudio: React.FC<ContentStudioProps> = ({ appContext, history }) =>
     }, [appContext.prefillData]);
     
     // Clear results when active brand changes
-    useEffect(() => {
+    React.useEffect(() => {
         setResult(null);
         setSources([]);
     }, [appContext.activeBrandId]);
