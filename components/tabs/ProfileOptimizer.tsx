@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
 import { optimizeProfileService } from '../../services/geminiService';
 import { AppContext, OptimizedProfile, HistoryItem } from '../../types';
 import { fileToBase64, downloadAsMarkdown } from '../../utils/fileUtils';
@@ -13,24 +13,24 @@ interface ProfileOptimizerProps {
     history: HistoryItem[];
 }
 
-const ProfileOptimizer: React.FC<ProfileOptimizerProps> = ({ appContext, history }) => {
-    const [currentBio, setCurrentBio] = React.useState('');
-    const [platform, setPlatform] = React.useState('Instagram');
-    const [imageFile, setImageFile] = React.useState<File | null>(null);
-    const [imagePreview, setImagePreview] = React.useState<string | null>(null);
-    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
-    const [result, setResult] = React.useState<OptimizedProfile | null>(null);
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
-    const fileInputRef = React.useRef<HTMLInputElement>(null);
+const ProfileOptimizer: FC<ProfileOptimizerProps> = ({ appContext, history }) => {
+    const [currentBio, setCurrentBio] = useState('');
+    const [platform, setPlatform] = useState('Instagram');
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [useGlobalContext, setUseGlobalContext] = useState(true);
+    const [result, setResult] = useState<OptimizedProfile | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     
-    React.useEffect(() => {
+    useEffect(() => {
         setResult(null);
         setImageFile(null);
         setImagePreview(null);
     }, [appContext.activeBrandId]);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setImageFile(file);
@@ -53,7 +53,7 @@ const ProfileOptimizer: React.FC<ProfileOptimizerProps> = ({ appContext, history
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!imageFile) {
             setError('Por favor, envie um print do seu perfil.');

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, useRef, FC } from 'react';
 import { FunnelStage } from '../../../types';
 import { Card } from '../../ui/Card';
 import Button from '../../ui/Button';
@@ -21,19 +21,19 @@ const iconMap = {
     TrophyIcon
 };
 
-const FunnelNode: React.FC<FunnelNodeProps> = ({ stage, index, totalStages, onUpdate, onRemove, onMove, onGetSuggestions }) => {
-    const [isEditing, setIsEditing] = React.useState(false);
-    const [title, setTitle] = React.useState(stage.title);
-    const [description, setDescription] = React.useState(stage.description);
+const FunnelNode: FC<FunnelNodeProps> = ({ stage, index, totalStages, onUpdate, onRemove, onMove, onGetSuggestions }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [title, setTitle] = useState(stage.title);
+    const [description, setDescription] = useState(stage.description);
 
-    const cardRef = React.useRef<HTMLDivElement>(null);
+    const cardRef = useRef<HTMLDivElement>(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         setTitle(stage.title);
         setDescription(stage.description);
     }, [stage]);
 
-     React.useEffect(() => {
+     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
                 if (isEditing) {

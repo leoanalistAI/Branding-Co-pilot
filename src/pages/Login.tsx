@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { FC } from 'react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase } from '@/src/integrations/supabase/client';
 import { SplineScene } from '@/components/ui/spline';
 
-const Login: React.FC = () => {
+const Login: FC = () => {
     return (
         <div className="h-screen w-full relative flex items-center justify-center bg-black overflow-hidden p-4">
             <SplineScene

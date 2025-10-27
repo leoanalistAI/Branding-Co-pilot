@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, FC } from 'react';
 import { HistoryItem } from '../../types';
 import { TrashIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons/Icons';
 
@@ -10,8 +10,8 @@ interface HistorySidebarProps {
     activeItemId?: string | null;
 }
 
-const HistorySidebar: React.FC<HistorySidebarProps> = ({ history, onSelect, onDelete, onClear, activeItemId }) => {
-    const [isOpen, setIsOpen] = React.useState(true);
+const HistorySidebar: FC<HistorySidebarProps> = ({ history, onSelect, onDelete, onClear, activeItemId }) => {
+    const [isOpen, setIsOpen] = useState(true);
 
     if (!isOpen) {
         return (

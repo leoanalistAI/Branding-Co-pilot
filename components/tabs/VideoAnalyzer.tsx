@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
 import { AppContext, VideoAnalysisResult, HistoryItem } from '../../types';
 import { analyzeVideoService } from '../../services/geminiService';
 import { fileToBase64, downloadAsMarkdown } from '../../utils/fileUtils';
@@ -13,28 +13,28 @@ interface VideoAnalyzerProps {
     history: HistoryItem[];
 }
 
-const VideoAnalyzer: React.FC<VideoAnalyzerProps> = ({ appContext, history }) => {
-    const [videoFile, setVideoFile] = React.useState<File | null>(null);
-    const [userPrompt, setUserPrompt] = React.useState('');
-    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
-    const [result, setResult] = React.useState<VideoAnalysisResult | null>(null);
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
-    const fileInputRef = React.useRef<HTMLInputElement>(null);
+const VideoAnalyzer: FC<VideoAnalyzerProps> = ({ appContext, history }) => {
+    const [videoFile, setVideoFile] = useState<File | null>(null);
+    const [userPrompt, setUserPrompt] = useState('');
+    const [useGlobalContext, setUseGlobalContext] = useState(true);
+    const [result, setResult] = useState<VideoAnalysisResult | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Clear results when active brand changes
-    React.useEffect(() => {
+    useEffect(() => {
         setResult(null);
     }, [appContext.activeBrandId]);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setVideoFile(file);
         }
     };
     
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!videoFile) {
             setError('Por favor, selecione um arquivo de vídeo.');

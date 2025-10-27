@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, FC } from 'react';
 import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
 import { generateFunnelStageSuggestionsService } from '../../../services/geminiService';
 import Spinner from '../../ui/Spinner';
@@ -14,12 +14,12 @@ interface SuggestionsModalProps {
     onUpdateSuggestions: (stageId: string, suggestions: FunnelStageSuggestions, sources: Source[]) => void;
 }
 
-const SuggestionsModal: React.FC<SuggestionsModalProps> = ({ isOpen, onClose, stage, appContext, onUpdateSuggestions }) => {
-    const [suggestions, setSuggestions] = React.useState<FunnelStageSuggestions | null>(null);
-    const [sources, setSources] = React.useState<Source[]>([]);
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
-    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
+const SuggestionsModal: FC<SuggestionsModalProps> = ({ isOpen, onClose, stage, appContext, onUpdateSuggestions }) => {
+    const [suggestions, setSuggestions] = useState<FunnelStageSuggestions | null>(null);
+    const [sources, setSources] = useState<Source[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [useGlobalContext, setUseGlobalContext] = useState(true);
 
     const fetchSuggestions = async () => {
         setIsLoading(true);
@@ -41,7 +41,7 @@ const SuggestionsModal: React.FC<SuggestionsModalProps> = ({ isOpen, onClose, st
         }
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (isOpen) {
             // If suggestions already exist on the stage object, display them
             if (stage.suggestions) {

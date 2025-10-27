@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, FC, FormEvent } from 'react';
 import Button from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/Card';
 import { SplineScene } from '../ui/spline';
@@ -7,10 +7,10 @@ interface ApiKeySetupProps {
     onKeySubmit: (key: string) => void;
 }
 
-const ApiKeySetup: React.FC<ApiKeySetupProps> = ({ onKeySubmit }) => {
-    const [apiKey, setApiKey] = React.useState('');
+const ApiKeySetup: FC<ApiKeySetupProps> = ({ onKeySubmit }) => {
+    const [apiKey, setApiKey] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (apiKey.trim()) {
             onKeySubmit(apiKey.trim());

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
 import { generateImageService, editImageService } from '../../services/geminiService';
 import { AppContext, ImageResult, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -13,22 +13,22 @@ interface ImageGeneratorProps {
     history: HistoryItem[];
 }
 
-const ImageGenerator: React.FC<ImageGeneratorProps> = ({ appContext, history }) => {
-    const [prompt, setPrompt] = React.useState('');
-    const [aspectRatio, setAspectRatio] = React.useState('1:1');
-    const [result, setResult] = React.useState<ImageResult | null>(null);
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
-    const [referenceImageFile, setReferenceImageFile] = React.useState<File | null>(null);
-    const [referenceImagePreview, setReferenceImagePreview] = React.useState<string | null>(null);
-    const fileInputRef = React.useRef<HTMLInputElement>(null);
+const ImageGenerator: FC<ImageGeneratorProps> = ({ appContext, history }) => {
+    const [prompt, setPrompt] = useState('');
+    const [aspectRatio, setAspectRatio] = useState('1:1');
+    const [result, setResult] = useState<ImageResult | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [referenceImageFile, setReferenceImageFile] = useState<File | null>(null);
+    const [referenceImagePreview, setReferenceImagePreview] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Clear results when active brand changes
-    React.useEffect(() => {
+    useEffect(() => {
         setResult(null);
     }, [appContext.activeBrandId]);
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setReferenceImageFile(file);
@@ -48,7 +48,7 @@ const ImageGenerator: React.FC<ImageGeneratorProps> = ({ appContext, history }) 
         }
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);

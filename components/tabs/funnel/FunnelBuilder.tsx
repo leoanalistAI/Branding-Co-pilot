@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, FC } from 'react';
 import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
 import FunnelToolbar from './FunnelToolbar';
 import FunnelNode from './FunnelNode';
@@ -9,13 +9,13 @@ interface FunnelBuilderProps {
     appContext: AppContext;
 }
 
-const FunnelBuilder: React.FC<FunnelBuilderProps> = ({ appContext }) => {
-    const [stages, setStages] = React.useState<FunnelStage[]>([]);
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
-    const [selectedStage, setSelectedStage] = React.useState<FunnelStage | null>(null);
+const FunnelBuilder: FC<FunnelBuilderProps> = ({ appContext }) => {
+    const [stages, setStages] = useState<FunnelStage[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedStage, setSelectedStage] = useState<FunnelStage | null>(null);
 
     // Clear results when active brand changes
-    React.useEffect(() => {
+    useEffect(() => {
         setStages([]);
     }, [appContext.activeBrandId]);
     

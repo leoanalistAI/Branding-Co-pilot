@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, FC, FormEvent } from 'react';
 import { analyzeCompetitorService, findPeersService } from '../../services/geminiService';
 import { AppContext, CompetitorAnalysis, Source, HistoryItem, FoundCompetitor } from '../../types';
 import Button from '../ui/Button';
@@ -15,22 +15,22 @@ interface CompetitorAnalyzerProps {
     history: HistoryItem[];
 }
 
-const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, history }) => {
-    const [competitorUrl, setCompetitorUrl] = React.useState('');
-    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
+const CompetitorAnalyzer: FC<CompetitorAnalyzerProps> = ({ appContext, history }) => {
+    const [competitorUrl, setCompetitorUrl] = useState('');
+    const [useGlobalContext, setUseGlobalContext] = useState(true);
     
-    const [result, setResult] = React.useState<CompetitorAnalysis | null>(null);
-    const [sources, setSources] = React.useState<Source[]>([]);
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
+    const [result, setResult] = useState<CompetitorAnalysis | null>(null);
+    const [sources, setSources] = useState<Source[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const [foundPeers, setFoundPeers] = React.useState<FoundCompetitor[] | null>(null);
-    const [isFinding, setIsFinding] = React.useState(false);
-    const [findError, setFindError] = React.useState<string | null>(null);
+    const [foundPeers, setFoundPeers] = useState<FoundCompetitor[] | null>(null);
+    const [isFinding, setIsFinding] = useState(false);
+    const [findError, setFindError] = useState<string | null>(null);
 
 
     // Clear results when active brand changes
-    React.useEffect(() => {
+    useEffect(() => {
         setResult(null);
         setSources([]);
         setFoundPeers(null);
@@ -68,7 +68,7 @@ const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, his
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         runAnalysis(competitorUrl);
     };

@@ -1,5 +1,5 @@
-import * as React from 'react'
-const Spline = React.lazy(() => import('@splinetool/react-spline'))
+import { lazy, Suspense } from 'react'
+const Spline = lazy(() => import('@splinetool/react-spline'))
 
 interface SplineSceneProps {
   scene: string
@@ -8,7 +8,7 @@ interface SplineSceneProps {
 
 export function SplineScene({ scene, className }: SplineSceneProps) {
   return (
-    <React.Suspense 
+    <Suspense 
       fallback={
         <div className="w-full h-full flex items-center justify-center bg-slate-950">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
@@ -19,6 +19,6 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
         scene={scene}
         className={className}
       />
-    </React.Suspense>
+    </Suspense>
   )
 }

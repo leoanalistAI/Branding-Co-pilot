@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC } from 'react';
 import { AppContext } from '../../types';
 import { supabase } from '@/src/integrations/supabase/client';
 
@@ -7,7 +7,7 @@ interface ContextSummaryProps {
     onChangeApiKey: () => void;
 }
 
-const ContextSummary: React.FC<ContextSummaryProps> = ({ context, onChangeApiKey }) => {
+const ContextSummary: FC<ContextSummaryProps> = ({ context, onChangeApiKey }) => {
     const handleSignOut = async () => {
         await supabase.auth.signOut();
     };

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, FC, FormEvent } from 'react';
 import { developProductService } from '../../services/geminiService';
 import { AppContext, ProductIdea, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -14,21 +14,21 @@ interface ProductDeveloperProps {
     history: HistoryItem[];
 }
 
-const ProductDeveloper: React.FC<ProductDeveloperProps> = ({ appContext, history }) => {
-    const [productIdea, setProductIdea] = React.useState('');
-    const [useGlobalContext, setUseGlobalContext] = React.useState(true);
-    const [result, setResult] = React.useState<ProductIdea | null>(null);
-    const [sources, setSources] = React.useState<Source[]>([]);
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
+const ProductDeveloper: FC<ProductDeveloperProps> = ({ appContext, history }) => {
+    const [productIdea, setProductIdea] = useState('');
+    const [useGlobalContext, setUseGlobalContext] = useState(true);
+    const [result, setResult] = useState<ProductIdea | null>(null);
+    const [sources, setSources] = useState<Source[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     
     // Clear results when active brand changes
-    React.useEffect(() => {
+    useEffect(() => {
         setResult(null);
         setSources([]);
     }, [appContext.activeBrandId]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
