@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { createEditorialCalendarService } from '../../services/geminiService';
 import { AppContext, EditorialCalendarPost, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';

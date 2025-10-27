@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { generateBrandDnaService, generateAudienceAvatarService } from '../../services/geminiService';
 import { AppContext, BrandDna, AudienceAvatar, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';

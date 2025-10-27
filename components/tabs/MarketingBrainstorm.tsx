@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { brainstormMarketingIdeasService } from '../../services/geminiService';
 import { AppContext, BrainstormIdea, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';

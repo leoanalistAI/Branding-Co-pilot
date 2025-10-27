@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { FunnelStage } from '../../../types';
 import { Card } from '../../ui/Card';
 import Button from '../../ui/Button';

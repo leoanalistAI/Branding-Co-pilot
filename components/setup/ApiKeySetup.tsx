@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Button from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/Card';
 import { SplineScene } from '../ui/spline';

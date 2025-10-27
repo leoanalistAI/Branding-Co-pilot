@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 // A generic icon props type
 type IconProps = React.SVGProps<SVGSVGElement>;

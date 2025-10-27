@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/src/integrations/supabase/client';
 import TabButton from './components/ui/TabButton';

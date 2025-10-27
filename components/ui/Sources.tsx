@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Source } from '../../types';
 import { LinkIcon } from '../icons/Icons';
 

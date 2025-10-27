@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { generateImageService, editImageService } from '../../services/geminiService';
 import { AppContext, ImageResult, HistoryItem } from '../../types';
 import Button from '../ui/Button';

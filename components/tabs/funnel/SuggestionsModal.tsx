@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
 import { generateFunnelStageSuggestionsService } from '../../../services/geminiService';
 import Spinner from '../../ui/Spinner';

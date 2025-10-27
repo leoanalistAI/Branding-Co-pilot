@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { AppContext, VideoAnalysisResult, HistoryItem } from '../../types';
 import { analyzeVideoService } from '../../services/geminiService';
 import { fileToBase64, downloadAsMarkdown } from '../../utils/fileUtils';

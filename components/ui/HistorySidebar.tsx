@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { HistoryItem } from '../../types';
 import { TrashIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons/Icons';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { developProductService } from '../../services/geminiService';
 import { AppContext, ProductIdea, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';

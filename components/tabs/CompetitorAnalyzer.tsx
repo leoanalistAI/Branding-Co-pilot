@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { analyzeCompetitorService, findPeersService } from '../../services/geminiService';
 import { AppContext, CompetitorAnalysis, Source, HistoryItem, FoundCompetitor } from '../../types';
 import Button from '../ui/Button';

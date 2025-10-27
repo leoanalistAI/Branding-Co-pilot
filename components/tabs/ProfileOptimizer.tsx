@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { optimizeProfileService } from '../../services/geminiService';
 import { AppContext, OptimizedProfile, HistoryItem } from '../../types';
 import { fileToBase64, downloadAsMarkdown } from '../../utils/fileUtils';
