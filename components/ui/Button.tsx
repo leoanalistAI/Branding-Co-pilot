@@ -1,4 +1,4 @@
-import { FC, ButtonHTMLAttributes, ReactNode } from 'react';
+import React, { FC, ButtonHTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/utils';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

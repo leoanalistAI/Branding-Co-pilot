@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
 import { generateImageService, editImageService } from '../../services/geminiService';
 import { AppContext, ImageResult, HistoryItem } from '../../types';
 import Button from '../ui/Button';

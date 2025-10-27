@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
 import { optimizeProfileService } from '../../services/geminiService';
 import { AppContext, OptimizedProfile, HistoryItem } from '../../types';
 import { fileToBase64, downloadAsMarkdown } from '../../utils/fileUtils';

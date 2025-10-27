@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { AppContext } from '../../types';
 import { supabase } from '@/src/integrations/supabase/client';
 

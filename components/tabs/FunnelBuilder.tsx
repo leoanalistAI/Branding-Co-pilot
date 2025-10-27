@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../types';
 import FunnelToolbar from './funnel/FunnelToolbar';
@@ -24,7 +22,6 @@ const FunnelBuilder: React.FC<FunnelBuilderProps> = ({ appContext }) => {
     const saveFunnelToHistory = (currentStages: FunnelStage[]) => {
         if (!appContext.activeBrandId || currentStages.length === 0) return;
         
-// FIX: Removed unnecessary optional chaining for appContext method.
         appContext.addToHistory('funnel', {
             id: Date.now().toString(),
             timestamp: new Date().toISOString(),

@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/src/integrations/supabase/client';
 import TabButton from './components/ui/TabButton';

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { Source } from '../../types';
 import { LinkIcon } from '../icons/Icons';
 

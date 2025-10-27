@@ -1,4 +1,4 @@
-import { FC, SVGProps } from 'react';
+import React, { FC, SVGProps } from 'react';
 
 interface TabButtonProps {
     label: string;

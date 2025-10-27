@@ -1,4 +1,4 @@
-import { useState, useEffect, FC, FormEvent } from 'react';
+import React, { useState, useEffect, FC, FormEvent } from 'react';
 import { developProductService } from '../../services/geminiService';
 import { AppContext, ProductIdea, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
