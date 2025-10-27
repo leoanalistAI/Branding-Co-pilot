@@ -1,6 +1,6 @@
 import React from 'react';
 import { Session } from '@supabase/supabase-js';
-import { supabase } from './integrations/supabase/client';
+import { supabase } from '@/src/integrations/supabase/client';
 import TabButton from './components/ui/TabButton';
 import ContextSummary from './components/ui/ContextSummary';
 import FoundationAndPersonas from './components/tabs/FoundationAndPersonas';
@@ -16,7 +16,7 @@ import ImageGenerator from './components/tabs/ImageGenerator';
 import LandingPage from './components/landing/LandingPage';
 import ProfileOptimizer from './components/tabs/ProfileOptimizer';
 import ApiKeySetup from './components/setup/ApiKeySetup';
-import Login from './pages/Login';
+import Login from './src/pages/Login';
 import {
     IdentificationIcon,
     CubeIcon,
