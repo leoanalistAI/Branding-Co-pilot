@@ -33,7 +33,8 @@ import {
     PhotoIcon,
     UserCircleIcon,
 } from '@/components/icons/Icons';
-import { AppContext, BrandDna, HistoryState, HistoryItem } from '@/types';
+import { AppContext, HistoryItem } from '@/types';
+import { useHistory } from '@/src/hooks/useHistory';
 
 type Tab =
     | 'dna'
@@ -51,7 +52,6 @@ type Tab =
 type AppState = 'landing' | 'main';
     
 const APP_STATE_KEY = 'brandingCopilotAppState_v2';
-const HISTORY_KEY = 'brandingCopilotHistory_v2';
 export const API_KEY_STORAGE_KEY = 'brandingCopilotApiKey_v1';
 
 
@@ -68,23 +68,16 @@ const App: FC = () => {
     const [activeTab, setActiveTab] = useState<Tab>('dna');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [prefillData, setPrefillData] = useState<{ tab: string; data: any } | null>(null);
-    const [activeBrandId, setActiveBrandId] = useState<string | null>(null);
 
-    const [history, setHistory] = useState<HistoryState>(() => {
-        try {
-            const savedHistory = localStorage.getItem(HISTORY_KEY);
-            const parsed = savedHistory ? JSON.parse(savedHistory) : null;
-            if (parsed && parsed.dna && parsed.brandHistories) {
-                return parsed;
-            }
-            return { dna: [], brandHistories: {} };
-        } catch (error) {
-            console.error("Could not load history from localStorage", error);
-            return { dna: [], brandHistories: {} };
-        }
-    });
-    
-    const [brandDna, setBrandDna] = useState<BrandDna | null>(null);
+    const {
+        history,
+        brandDna,
+        activeBrandId,
+        setActiveBrand,
+        addToHistory,
+        removeFromHistory,
+        clearHistory,
+    } = useHistory();
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
@@ -102,20 +95,13 @@ const App: FC = () => {
         try {
             const savedState = localStorage.getItem(APP_STATE_KEY);
             if (savedState) {
-                const { activeTab: savedActiveTab, activeBrandId: savedActiveBrandId } = JSON.parse(savedState);
+                const { activeTab: savedActiveTab } = JSON.parse(savedState);
                 if (savedActiveTab) setActiveTab(savedActiveTab);
-                if (savedActiveBrandId) {
-                    const activeBrandHistoryItem = history.dna.find(item => item.id === savedActiveBrandId);
-                    if (activeBrandHistoryItem) {
-                        setActiveBrandId(savedActiveBrandId);
-                        setBrandDna(activeBrandHistoryItem.result.dna);
-                    }
-                }
             }
         } catch (error) {
             console.error("Could not load app state from localStorage", error);
         }
-    }, [history.dna]);
+    }, []);
 
     useEffect(() => {
         try {
@@ -128,15 +114,6 @@ const App: FC = () => {
             console.error("Could not save app state to localStorage", error);
         }
     }, [activeTab, activeBrandId]);
-
-
-    useEffect(() => {
-        try {
-            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-        } catch (error) {
-            console.error("Could not save history to localStorage", error);
-        }
-    }, [history]);
     
     const handleKeySubmit = (key: string) => {
         try {
@@ -150,124 +127,6 @@ const App: FC = () => {
     const handleChangeApiKey = () => {
         localStorage.removeItem(API_KEY_STORAGE_KEY);
         setApiKey(null);
-    };
-
-    const setActiveBrand = (item: HistoryItem | null) => {
-        if (item) {
-            setActiveBrandId(item.id);
-            setBrandDna(item.result.dna);
-        } else {
-            setActiveBrandId(null);
-            setBrandDna(null);
-        }
-    };
-
-    const addToHistory = (tab: string, item: HistoryItem) => {
-        setHistory(prev => {
-            if (tab === 'dna') {
-                const existingIndex = prev.dna.findIndex(h => h.id === item.id);
-                let newDna;
-                if (existingIndex > -1) {
-                    newDna = [
-                        ...prev.dna.slice(0, existingIndex),
-                        item,
-                        ...prev.dna.slice(existingIndex + 1),
-                    ];
-                } else {
-                    newDna = [item, ...prev.dna];
-                }
-                return { ...prev, dna: newDna };
-            }
-    
-            if (activeBrandId) {
-                const brandHistory = prev.brandHistories[activeBrandId] || {};
-                const tabHistory = brandHistory[tab] || [];
-                const existingIndex = tabHistory.findIndex(h => h.id === item.id);
-                let newTabHistory;
-                if (existingIndex > -1) {
-                    newTabHistory = [
-                        ...tabHistory.slice(0, existingIndex),
-                        item,
-                        ...tabHistory.slice(existingIndex + 1),
-                    ];
-                } else {
-                    newTabHistory = [item, ...tabHistory];
-                }
-    
-                return {
-                    ...prev,
-                    brandHistories: {
-                        ...prev.brandHistories,
-                        [activeBrandId]: {
-                            ...brandHistory,
-                            [tab]: newTabHistory.slice(0, 20),
-                        },
-                    },
-                };
-            }
-            return prev;
-        });
-    };
-    
-    const removeFromHistory = (tab: string, itemId: string) => {
-        setHistory(prev => {
-            if (tab === 'dna') {
-                const newDna = prev.dna.filter(item => item.id !== itemId);
-                const { [itemId]: _, ...remainingBrandHistories } = prev.brandHistories;
-    
-                if (activeBrandId === itemId) {
-                    setActiveBrandId(null);
-                    setBrandDna(null);
-                }
-    
-                return {
-                    dna: newDna,
-                    brandHistories: remainingBrandHistories,
-                };
-            }
-    
-            if (activeBrandId && prev.brandHistories[activeBrandId]?.[tab]) {
-                const brandHistory = prev.brandHistories[activeBrandId];
-                const newTabHistory = brandHistory[tab].filter(item => item.id !== itemId);
-    
-                return {
-                    ...prev,
-                    brandHistories: {
-                        ...prev.brandHistories,
-                        [activeBrandId]: {
-                            ...brandHistory,
-                            [tab]: newTabHistory,
-                        },
-                    },
-                };
-            }
-            return prev;
-        });
-    };
-    
-    const clearHistory = (tab: string) => {
-        setHistory(prev => {
-            if (tab === 'dna') {
-                setActiveBrandId(null);
-                setBrandDna(null);
-                return { dna: [], brandHistories: {} };
-            }
-    
-            if (activeBrandId && prev.brandHistories[activeBrandId]?.[tab]) {
-                const brandHistory = prev.brandHistories[activeBrandId];
-                return {
-                    ...prev,
-                    brandHistories: {
-                        ...prev.brandHistories,
-                        [activeBrandId]: {
-                            ...brandHistory,
-                            [tab]: [],
-                        },
-                    },
-                };
-            }
-            return prev;
-        });
     };
 
     const appContext: AppContext = {
