@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC } from 'react';
 import { Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/src/integrations/supabase/client';
 import TabButton from '@/components/ui/TabButton';
 import ContextSummary from '@/components/ui/ContextSummary';
 import FoundationAndPersonas from '@/components/tabs/FoundationAndPersonas';
