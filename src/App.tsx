@@ -168,8 +168,11 @@ const App: FC = () => {
                 const existingIndex = prev.dna.findIndex(h => h.id === item.id);
                 let newDna;
                 if (existingIndex > -1) {
-                    newDna = [...prev.dna];
-                    newDna[existingIndex] = item;
+                    newDna = [
+                        ...prev.dna.slice(0, existingIndex),
+                        item,
+                        ...prev.dna.slice(existingIndex + 1),
+                    ];
                 } else {
                     newDna = [item, ...prev.dna];
                 }
@@ -182,8 +185,11 @@ const App: FC = () => {
                 const existingIndex = tabHistory.findIndex(h => h.id === item.id);
                 let newTabHistory;
                 if (existingIndex > -1) {
-                    newTabHistory = [...tabHistory];
-                    newTabHistory[existingIndex] = item;
+                    newTabHistory = [
+                        ...tabHistory.slice(0, existingIndex),
+                        item,
+                        ...tabHistory.slice(existingIndex + 1),
+                    ];
                 } else {
                     newTabHistory = [item, ...tabHistory];
                 }
@@ -215,7 +221,6 @@ const App: FC = () => {
                 }
     
                 return {
-                    ...prev,
                     dna: newDna,
                     brandHistories: remainingBrandHistories,
                 };
