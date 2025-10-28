@@ -21,11 +21,11 @@ const archetypes = {
         title: "Especialista Estabelecido",
         description: "Para quem já tem carreira e quer se posicionar como autoridade.",
         prefill: {
-            name: "Dr. Ana Oliveira",
-            purpose: "Capacitar líderes de negócios a utilizarem a inteligência artificial de forma ética e estratégica para impulsionar o crescimento.",
-            expertise: "Inteligência Artificial aplicada a negócios, ética em IA, liderança e transformação digital.",
-            audience: "Executivos C-level, diretores de tecnologia e gerentes de inovação em médias e grandes empresas.",
-            transformation: "De uma visão reativa sobre tecnologia para uma liderança proativa que integra a IA no core do negócio, gerando vantagem competitiva e inovação sustentável.",
+            name: "Ex: Dr. Ana Oliveira",
+            purpose: "Ex: Capacitar líderes de negócios a utilizarem a inteligência artificial de forma ética e estratégica.",
+            expertise: "Ex: Inteligência Artificial, ética em IA, liderança e transformação digital.",
+            audience: "Ex: Executivos C-level, diretores de tecnologia e gerentes de inovação.",
+            transformation: "Ex: Levar líderes a integrarem a IA no core do negócio, gerando vantagem competitiva.",
             personality: "Profissional e Confiável"
         }
     },
@@ -34,11 +34,11 @@ const archetypes = {
         title: "Talento em Ascensão",
         description: "Para estudantes ou freelancers no início de carreira.",
         prefill: {
-            name: "Lucas Mendes",
-            purpose: "Ajudar pequenas empresas e ONGs a contarem suas histórias de forma impactante através do design gráfico e storytelling visual.",
-            expertise: "Design de identidade visual (branding), design para mídias sociais, ilustração digital.",
-            audience: "Empreendedores de pequenos negócios, gestores de marketing de ONGs e startups em estágio inicial.",
-            transformation: "Transformar uma comunicação visual genérica em uma marca forte e autêntica que gera conexão, engajamento e reconhecimento.",
+            name: "Ex: Lucas Mendes",
+            purpose: "Ex: Ajudar pequenas empresas a contarem suas histórias através do design gráfico.",
+            expertise: "Ex: Design de identidade visual, design para mídias sociais, ilustração digital.",
+            audience: "Ex: Empreendedores de pequenos negócios, gestores de marketing de ONGs.",
+            transformation: "Ex: Transformar uma comunicação visual genérica em uma marca forte e autêntica.",
             personality: "Amigável e Acessível"
         }
     },
@@ -47,11 +47,11 @@ const archetypes = {
         title: "Profissional Autônomo",
         description: "Para quem já atua de forma independente e quer escalar.",
         prefill: {
-            name: "Sofia Costa",
-            purpose: "Otimizar a saúde e o bem-estar de profissionais ocupados através de programas de nutrição personalizados e coaching de hábitos.",
-            expertise: "Nutrição funcional, planejamento de dietas, coaching de saúde e bem-estar, culinária saudável.",
-            audience: "Profissionais entre 30 e 50 anos que trabalham em ambientes corporativos e têm pouco tempo para cuidar da alimentação.",
-            transformation: "Sair de um estado de cansaço e baixa energia para uma vida com mais vitalidade, foco e produtividade, através de uma relação mais saudável com a comida.",
+            name: "Ex: Sofia Costa",
+            purpose: "Ex: Otimizar a saúde e o bem-estar de profissionais ocupados com nutrição personalizada.",
+            expertise: "Ex: Nutrição funcional, planejamento de dietas, coaching de saúde e bem-estar.",
+            audience: "Ex: Profissionais entre 30 e 50 anos que trabalham em ambientes corporativos.",
+            transformation: "Ex: Sair de um estado de cansaço para uma vida com mais vitalidade, foco e produtividade.",
             personality: "Inspirador e Motivacional"
         }
     }
@@ -76,36 +76,50 @@ const FoundationAndPersonas: FC<FoundationAndPersonasProps> = ({ appContext }) =
     const [isLoadingAvatar, setIsLoadingAvatar] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
+    const [isEditingFromHistory, setIsEditingFromHistory] = useState(false);
 
     useEffect(() => {
         if (appContext.brandDna && appContext.activeBrandId) {
-            setBrandDnaResult(appContext.brandDna);
-            setActiveHistoryId(appContext.activeBrandId);
             const activeItem = appContext.history.dna.find(item => item.id === appContext.activeBrandId);
-            if (activeItem) {
-                setAvatarResult(activeItem.result.avatar || null);
-                // When loading from history, we don't have an archetype, but we can show the form
-                setSelectedArchetype('expert'); // default to show the form
-            } else {
-                 setAvatarResult(null);
+            if (!activeItem) return;
+
+            setBrandDnaResult(activeItem.result.dna);
+            setAvatarResult(activeItem.result.avatar || null);
+            setActiveHistoryId(appContext.activeBrandId);
+
+            if (isEditingFromHistory) {
+                const { inputs } = activeItem;
+                setName(inputs.name || '');
+                setPurpose(inputs.purpose || '');
+                setExpertise(inputs.expertise || '');
+                setAudience(inputs.audience || '');
+                setTransformation(inputs.transformation || '');
+                setPersonality(inputs.personality || 'Profissional e Confiável');
+                setSelectedArchetype('expert');
+                setIsEditingFromHistory(false);
             }
         } else {
             setBrandDnaResult(null);
             setAvatarResult(null);
             setActiveHistoryId(null);
             setSelectedArchetype(null);
+            setName('');
+            setPurpose('');
+            setExpertise('');
+            setAudience('');
+            setTransformation('');
+            setPersonality('Profissional e Confiável');
         }
     }, [appContext.brandDna, appContext.activeBrandId, appContext.history.dna]);
     
     const handleArchetypeSelect = (archetype: Archetype) => {
         setSelectedArchetype(archetype);
-        const { prefill } = archetypes[archetype];
-        setName(prefill.name);
-        setPurpose(prefill.purpose);
-        setExpertise(prefill.expertise);
-        setAudience(prefill.audience);
-        setTransformation(prefill.transformation);
-        setPersonality(prefill.personality);
+        setName('');
+        setPurpose('');
+        setExpertise('');
+        setAudience('');
+        setTransformation('');
+        setPersonality('Profissional e Confiável');
     };
 
     const handleDnaSubmit = async (e: FormEvent) => {
@@ -174,19 +188,7 @@ const FoundationAndPersonas: FC<FoundationAndPersonasProps> = ({ appContext }) =
     };
 
     const handleHistorySelect = (item: HistoryItem) => {
-        const { inputs, result } = item;
-        setName(inputs.name || '');
-        setPurpose(inputs.purpose || '');
-        setExpertise(inputs.expertise || '');
-        setAudience(inputs.audience || '');
-        setTransformation(inputs.transformation || '');
-        setPersonality(inputs.personality || 'Profissional e Confiável');
-
-        setBrandDnaResult(result.dna || null);
-        setDnaSources(result.sources || []);
-        setAvatarResult(result.avatar || null);
-        setAvatarSources(result.avatarSources || []);
-        
+        setIsEditingFromHistory(true);
         appContext.setActiveBrand(item);
     };
 
@@ -233,19 +235,23 @@ const FoundationAndPersonas: FC<FoundationAndPersonasProps> = ({ appContext }) =
     
     const renderDnaForm = () => {
         const inputClasses = "w-full bg-neutral-900 text-neutral-200 p-2 rounded-lg border border-neutral-700 focus:ring-blue-500/50 focus:border-blue-500 focus:ring-2 transition-colors";
+        const placeholderData = selectedArchetype ? archetypes[selectedArchetype].prefill : {
+            name: '', purpose: '', expertise: '', audience: '', transformation: ''
+        };
+
         return (
             <Card>
                 <CardHeader>
                     <CardTitle>Diagnóstico de Clareza</CardTitle>
-                    <CardDescription>Personalize os exemplos abaixo para definir a base da sua marca.</CardDescription>
+                    <CardDescription>Responda as perguntas abaixo para definir a base da sua marca.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleDnaSubmit} className="space-y-4">
-                        <div><label htmlFor="name" className="block text-sm font-medium text-neutral-300 mb-1">Seu Nome / Nome do Projeto</label><input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} className={inputClasses} required /></div>
-                        <div><label htmlFor="purpose" className="block text-sm font-medium text-neutral-300 mb-1">Qual sua grande missão ou propósito?</label><textarea id="purpose" value={purpose} onChange={(e) => setPurpose(e.target.value)} rows={3} className={inputClasses} required /></div>
-                        <div><label htmlFor="expertise" className="block text-sm font-medium text-neutral-300 mb-1">Quais suas áreas de expertise?</label><textarea id="expertise" value={expertise} onChange={(e) => setExpertise(e.target.value)} rows={2} className={inputClasses} required /></div>
-                        <div><label htmlFor="audience" className="block text-sm font-medium text-neutral-300 mb-1">Qual público você deseja impactar?</label><textarea id="audience" value={audience} onChange={(e) => setAudience(e.target.value)} rows={2} className={inputClasses} required /></div>
-                        <div><label htmlFor="transformation" className="block text-sm font-medium text-neutral-300 mb-1">Que transformação você oferece?</label><textarea id="transformation" value={transformation} onChange={(e) => setTransformation(e.target.value)} rows={3} className={inputClasses} required /></div>
+                        <div><label htmlFor="name" className="block text-sm font-medium text-neutral-300 mb-1">Seu Nome / Nome do Projeto</label><input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} className={inputClasses} required placeholder={placeholderData.name} /></div>
+                        <div><label htmlFor="purpose" className="block text-sm font-medium text-neutral-300 mb-1">Qual sua grande missão ou propósito?</label><textarea id="purpose" value={purpose} onChange={(e) => setPurpose(e.target.value)} rows={3} className={inputClasses} required placeholder={placeholderData.purpose} /></div>
+                        <div><label htmlFor="expertise" className="block text-sm font-medium text-neutral-300 mb-1">Quais suas áreas de expertise?</label><textarea id="expertise" value={expertise} onChange={(e) => setExpertise(e.target.value)} rows={2} className={inputClasses} required placeholder={placeholderData.expertise} /></div>
+                        <div><label htmlFor="audience" className="block text-sm font-medium text-neutral-300 mb-1">Qual público você deseja impactar?</label><textarea id="audience" value={audience} onChange={(e) => setAudience(e.target.value)} rows={2} className={inputClasses} required placeholder={placeholderData.audience} /></div>
+                        <div><label htmlFor="transformation" className="block text-sm font-medium text-neutral-300 mb-1">Que transformação você oferece?</label><textarea id="transformation" value={transformation} onChange={(e) => setTransformation(e.target.value)} rows={3} className={inputClasses} required placeholder={placeholderData.transformation} /></div>
                         <div>
                             <label htmlFor="personality" className="block text-sm font-medium text-neutral-300 mb-1">Qual a personalidade da sua comunicação?</label>
                             <select id="personality" value={personality} onChange={(e) => setPersonality(e.target.value)} className={inputClasses}>
