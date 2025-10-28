@@ -1,4 +1,4 @@
-import { useState, useEffect, FC, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createEditorialCalendarService } from '../../services/geminiService';
 import { AppContext, EditorialCalendarPost, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -14,7 +14,7 @@ interface EditorialCalendarProps {
     history: HistoryItem[];
 }
 
-const EditorialCalendar: FC<EditorialCalendarProps> = ({ appContext, history }) => {
+const EditorialCalendar: React.FC<EditorialCalendarProps> = ({ appContext, history }) => {
     const [theme, setTheme] = useState('');
     const [platforms, setPlatforms] = useState<string[]>(['Instagram', 'Blog']);
     const [numPosts, setNumPosts] = useState(5);
@@ -36,7 +36,7 @@ const EditorialCalendar: FC<EditorialCalendarProps> = ({ appContext, history }) 
         );
     };
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (platforms.length === 0) {
             setError("Selecione pelo menos uma plataforma.");

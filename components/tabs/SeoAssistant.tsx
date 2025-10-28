@@ -1,4 +1,5 @@
-import React, { useState, useEffect, FC, FormEvent } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { generateSeoAnalysisService } from '../../services/geminiService';
 import { AppContext, SeoAnalysisResult, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -14,7 +15,7 @@ interface SeoAssistantProps {
     history: HistoryItem[];
 }
 
-const SeoAssistant: FC<SeoAssistantProps> = ({ appContext, history }) => {
+const SeoAssistant: React.FC<SeoAssistantProps> = ({ appContext, history }) => {
     const [topic, setTopic] = useState('');
     const [useGlobalContext, setUseGlobalContext] = useState(true);
     const [result, setResult] = useState<SeoAnalysisResult | null>(null);
@@ -28,7 +29,7 @@ const SeoAssistant: FC<SeoAssistantProps> = ({ appContext, history }) => {
         setSources([]);
     }, [appContext.activeBrandId]);
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { AppContext, VideoAnalysisResult, HistoryItem } from '../../types';
 import { analyzeVideoService } from '../../services/geminiService';
 import { fileToBase64, downloadAsMarkdown } from '../../utils/fileUtils';
@@ -13,7 +13,7 @@ interface VideoAnalyzerProps {
     history: HistoryItem[];
 }
 
-const VideoAnalyzer: FC<VideoAnalyzerProps> = ({ appContext, history }) => {
+const VideoAnalyzer: React.FC<VideoAnalyzerProps> = ({ appContext, history }) => {
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [userPrompt, setUserPrompt] = useState('');
     const [useGlobalContext, setUseGlobalContext] = useState(true);
@@ -27,14 +27,14 @@ const VideoAnalyzer: FC<VideoAnalyzerProps> = ({ appContext, history }) => {
         setResult(null);
     }, [appContext.activeBrandId]);
 
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setVideoFile(file);
         }
     };
     
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!videoFile) {
             setError('Por favor, selecione um arquivo de vídeo.');

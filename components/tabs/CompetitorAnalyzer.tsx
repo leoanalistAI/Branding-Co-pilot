@@ -1,4 +1,4 @@
-import { useState, useEffect, FC, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { analyzeCompetitorService, findPeersService } from '../../services/geminiService';
 import { AppContext, CompetitorAnalysis, Source, HistoryItem, FoundCompetitor } from '../../types';
 import Button from '../ui/Button';
@@ -15,7 +15,7 @@ interface CompetitorAnalyzerProps {
     history: HistoryItem[];
 }
 
-const CompetitorAnalyzer: FC<CompetitorAnalyzerProps> = ({ appContext, history }) => {
+const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, history }) => {
     const [competitorUrl, setCompetitorUrl] = useState('');
     const [useGlobalContext, setUseGlobalContext] = useState(true);
     
@@ -68,7 +68,7 @@ const CompetitorAnalyzer: FC<CompetitorAnalyzerProps> = ({ appContext, history }
         }
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         runAnalysis(competitorUrl);
     };

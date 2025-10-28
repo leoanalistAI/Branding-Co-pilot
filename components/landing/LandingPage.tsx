@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import { SplineScene } from "../ui/spline";
 import { Spotlight } from "../ui/spotlight";
 import { RainbowButton } from '../ui/rainbow-button';
@@ -7,7 +7,7 @@ interface LandingPageProps {
   onStart: () => void;
 }
 
-const LandingPage: FC<LandingPageProps> = ({ onStart }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
   return (
     <div className="h-screen w-full relative flex items-center justify-center bg-black overflow-hidden">
         <Spotlight

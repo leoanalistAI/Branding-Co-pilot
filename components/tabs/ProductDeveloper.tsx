@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { developProductService } from '../../services/geminiService';
 import { AppContext, ProductIdea, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -14,7 +14,7 @@ interface ProductDeveloperProps {
     history: HistoryItem[];
 }
 
-const ProductDeveloper: FC<ProductDeveloperProps> = ({ appContext, history }) => {
+const ProductDeveloper: React.FC<ProductDeveloperProps> = ({ appContext, history }) => {
     const [productIdea, setProductIdea] = useState('');
     const [useGlobalContext, setUseGlobalContext] = useState(true);
     const [result, setResult] = useState<ProductIdea | null>(null);
@@ -28,7 +28,7 @@ const ProductDeveloper: FC<ProductDeveloperProps> = ({ appContext, history }) =>
         setSources([]);
     }, [appContext.activeBrandId]);
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);

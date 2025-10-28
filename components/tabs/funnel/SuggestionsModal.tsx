@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
 import { generateFunnelStageSuggestionsService } from '../../../services/geminiService';
 import Spinner from '../../ui/Spinner';
@@ -14,7 +14,7 @@ interface SuggestionsModalProps {
     onUpdateSuggestions: (stageId: string, suggestions: FunnelStageSuggestions, sources: Source[]) => void;
 }
 
-const SuggestionsModal: FC<SuggestionsModalProps> = ({ isOpen, onClose, stage, appContext, onUpdateSuggestions }) => {
+const SuggestionsModal: React.FC<SuggestionsModalProps> = ({ isOpen, onClose, stage, appContext, onUpdateSuggestions }) => {
     const [suggestions, setSuggestions] = useState<FunnelStageSuggestions | null>(null);
     const [sources, setSources] = useState<Source[]>([]);
     const [isLoading, setIsLoading] = useState(false);

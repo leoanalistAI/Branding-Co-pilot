@@ -1,6 +1,7 @@
-import { FC } from 'react';
 
-const Spinner: FC = () => {
+import React from 'react';
+
+const Spinner: React.FC = () => {
     return (
         <div className="flex justify-center items-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400"></div>

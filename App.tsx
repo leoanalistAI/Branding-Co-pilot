@@ -1,22 +1,19 @@
-import { useState, useEffect, FC } from 'react';
-import { Session } from '@supabase/supabase-js';
-import { supabase } from '@/src/integrations/supabase/client';
-import TabButton from '@/components/ui/TabButton';
-import ContextSummary from '@/components/ui/ContextSummary';
-import FoundationAndPersonas from '@/src/components/tabs/FoundationAndPersonas';
-import ContentStudio from '@/src/components/tabs/ContentStudio';
-import ProductDeveloper from '@/src/components/tabs/ProductDeveloper';
-import MarketingBrainstorm from '@/src/components/tabs/MarketingBrainstorm';
-import EditorialCalendar from '@/src/components/tabs/EditorialCalendar';
-import CompetitorAnalyzer from '@/src/components/tabs/CompetitorAnalyzer';
-import FunnelBuilder from '@/src/components/tabs/funnel/FunnelBuilder';
-import VideoAnalyzer from '@/src/components/tabs/VideoAnalyzer';
-import SeoAssistant from '@/src/components/tabs/SeoAssistant';
-import ImageGenerator from '@/src/components/tabs/ImageGenerator';
-import LandingPage from '@/components/landing/LandingPage';
-import ProfileOptimizer from '@/src/components/tabs/ProfileOptimizer';
-import ApiKeySetup from '@/components/setup/ApiKeySetup';
-import Login from '@/src/pages/Login';
+import React from 'react';
+import TabButton from './components/ui/TabButton';
+import ContextSummary from './components/ui/ContextSummary';
+import FoundationAndPersonas from './components/tabs/FoundationAndPersonas';
+import ContentStudio from './components/tabs/ContentStudio';
+import ProductDeveloper from './components/tabs/ProductDeveloper';
+import MarketingBrainstorm from './components/tabs/MarketingBrainstorm';
+import EditorialCalendar from './components/tabs/EditorialCalendar';
+import CompetitorAnalyzer from './components/tabs/CompetitorAnalyzer';
+import FunnelBuilder from './components/tabs/funnel/FunnelBuilder';
+import VideoAnalyzer from './components/tabs/VideoAnalyzer';
+import SeoAssistant from './components/tabs/SeoAssistant';
+import ImageGenerator from './components/tabs/ImageGenerator';
+import LandingPage from './components/landing/LandingPage';
+import ProfileOptimizer from './components/tabs/ProfileOptimizer';
+import ApiKeySetup from './components/setup/ApiKeySetup';
 import {
     IdentificationIcon,
     CubeIcon,
@@ -32,10 +29,8 @@ import {
     MagnifyingGlassIcon,
     PhotoIcon,
     UserCircleIcon,
-} from '@/components/icons/Icons';
-import { AppContext, HistoryItem } from '@/types';
-import { useHistory } from '@/src/hooks/useHistory';
-import { API_KEY_STORAGE_KEY } from './constants';
+} from './components/icons/Icons';
+import { AppContext, BrandDna, HistoryState, HistoryItem } from './types';
 
 type Tab =
     | 'dna'
@@ -50,60 +45,64 @@ type Tab =
     | 'seo'
     | 'image';
 
-type AppState = 'landing' | 'main';
+type AppState = 'landing' | 'apiKey' | 'main';
     
 const APP_STATE_KEY = 'brandingCopilotAppState_v2';
+const HISTORY_KEY = 'brandingCopilotHistory_v2';
+export const API_KEY_STORAGE_KEY = 'brandingCopilotApiKey_v1';
 
 
-const App: FC = () => {
-    const [appState, setAppState] = useState<AppState>('landing');
-    const [session, setSession] = useState<Session | null>(null);
-    const [apiKey, setApiKey] = useState<string | null>(() => {
+const App: React.FC = () => {
+    const [appState, setAppState] = React.useState<AppState>('landing');
+    const [activeTab, setActiveTab] = React.useState<Tab>('dna');
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+    const [prefillData, setPrefillData] = React.useState<{ tab: string; data: any } | null>(null);
+    const [activeBrandId, setActiveBrandId] = React.useState<string | null>(null);
+
+    const [history, setHistory] = React.useState<HistoryState>(() => {
         try {
-            return localStorage.getItem(API_KEY_STORAGE_KEY);
-        } catch {
-            return null;
+            const savedHistory = localStorage.getItem(HISTORY_KEY);
+            const parsed = savedHistory ? JSON.parse(savedHistory) : null;
+            if (parsed && parsed.dna && parsed.brandHistories) {
+                return parsed;
+            }
+            return { dna: [], brandHistories: {} };
+        } catch (error) {
+            console.error("Could not load history from localStorage", error);
+            return { dna: [], brandHistories: {} };
         }
     });
-    const [activeTab, setActiveTab] = useState<Tab>('dna');
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [prefillData, setPrefillData] = useState<{ tab: string; data: any } | null>(null);
+    
+    const [brandDna, setBrandDna] = React.useState<BrandDna | null>(null);
 
-    const {
-        history,
-        brandDna,
-        activeBrandId,
-        setActiveBrand,
-        addToHistory,
-        removeFromHistory,
-        clearHistory,
-    } = useHistory();
-
-    useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-        });
-
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-        });
-
-        return () => subscription.unsubscribe();
-    }, []);
-
-    useEffect(() => {
+    React.useEffect(() => {
         try {
+            const savedApiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+            if (savedApiKey) {
+                setAppState('main');
+            } else {
+                setAppState('landing');
+            }
+
             const savedState = localStorage.getItem(APP_STATE_KEY);
             if (savedState) {
-                const { activeTab: savedActiveTab } = JSON.parse(savedState);
+                const { activeTab: savedActiveTab, activeBrandId: savedActiveBrandId } = JSON.parse(savedState);
                 if (savedActiveTab) setActiveTab(savedActiveTab);
+                if (savedActiveBrandId) {
+                    const activeBrandHistoryItem = history.dna.find(item => item.id === savedActiveBrandId);
+                    if (activeBrandHistoryItem) {
+                        setActiveBrandId(savedActiveBrandId);
+                        setBrandDna(activeBrandHistoryItem.result.dna);
+                    }
+                }
             }
         } catch (error) {
             console.error("Could not load app state from localStorage", error);
+            setAppState('landing');
         }
     }, []);
 
-    useEffect(() => {
+    React.useEffect(() => {
         try {
             const stateToSave = {
                 activeTab,
@@ -114,11 +113,20 @@ const App: FC = () => {
             console.error("Could not save app state to localStorage", error);
         }
     }, [activeTab, activeBrandId]);
+
+
+    React.useEffect(() => {
+        try {
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        } catch (error) {
+            console.error("Could not save history to localStorage", error);
+        }
+    }, [history]);
     
     const handleKeySubmit = (key: string) => {
         try {
             localStorage.setItem(API_KEY_STORAGE_KEY, key);
-            setApiKey(key);
+            setAppState('main');
         } catch (error) {
             console.error("Could not save API key to localStorage", error);
         }
@@ -126,7 +134,81 @@ const App: FC = () => {
 
     const handleChangeApiKey = () => {
         localStorage.removeItem(API_KEY_STORAGE_KEY);
-        setApiKey(null);
+        setActiveBrand(null);
+        setAppState('apiKey');
+    };
+
+    const setActiveBrand = (item: HistoryItem | null) => {
+        if (item) {
+            setActiveBrandId(item.id);
+            setBrandDna(item.result.dna);
+        } else {
+            setActiveBrandId(null);
+            setBrandDna(null);
+        }
+    };
+
+    const addToHistory = (tab: string, item: HistoryItem) => {
+        setHistory(prev => {
+            const newHistory = JSON.parse(JSON.stringify(prev));
+            if (tab === 'dna') {
+                const existingIndex = newHistory.dna.findIndex(h => h.id === item.id);
+                if (existingIndex > -1) {
+                     newHistory.dna[existingIndex] = item;
+                } else {
+                    newHistory.dna.unshift(item);
+                }
+            } else if (activeBrandId) {
+                if (!newHistory.brandHistories[activeBrandId]) {
+                    newHistory.brandHistories[activeBrandId] = {};
+                }
+                if (!newHistory.brandHistories[activeBrandId][tab]) {
+                    newHistory.brandHistories[activeBrandId][tab] = [];
+                }
+                const existingIndex = newHistory.brandHistories[activeBrandId][tab].findIndex(h => h.id === item.id);
+                 if (existingIndex > -1) {
+                    newHistory.brandHistories[activeBrandId][tab][existingIndex] = item;
+                 } else {
+                    newHistory.brandHistories[activeBrandId][tab].unshift(item);
+                 }
+                newHistory.brandHistories[activeBrandId][tab] = newHistory.brandHistories[activeBrandId][tab].slice(0, 20);
+            }
+            return newHistory;
+        });
+    };
+    
+    const removeFromHistory = (tab: string, itemId: string) => {
+        setHistory(prev => {
+            const newHistory = { ...prev };
+            if (tab === 'dna') {
+                newHistory.dna = newHistory.dna.filter(item => item.id !== itemId);
+                if (newHistory.brandHistories[itemId]) {
+                    delete newHistory.brandHistories[itemId];
+                }
+                if (activeBrandId === itemId) {
+                    setActiveBrandId(null);
+                    setBrandDna(null);
+                }
+            } else if (activeBrandId && newHistory.brandHistories[activeBrandId]?.[tab]) {
+                newHistory.brandHistories[activeBrandId][tab] = newHistory.brandHistories[activeBrandId][tab].filter(item => item.id !== itemId);
+            }
+            return { ...newHistory };
+        });
+    };
+    
+    const clearHistory = (tab: string) => {
+         setHistory(prev => {
+            const newHistory = { ...prev };
+            if (tab === 'dna') {
+                newHistory.dna = [];
+                newHistory.brandHistories = {};
+                setActiveBrandId(null);
+                setBrandDna(null);
+            } else if (activeBrandId && newHistory.brandHistories[activeBrandId]?.[tab]) {
+                newHistory.brandHistories[activeBrandId][tab] = [];
+            }
+            return { ...newHistory };
+        });
     };
 
     const appContext: AppContext = {
@@ -147,7 +229,7 @@ const App: FC = () => {
         clearHistory: clearHistory,
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (isSidebarOpen) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -192,14 +274,10 @@ const App: FC = () => {
     ];
     
     if (appState === 'landing') {
-        return <LandingPage onStart={() => setAppState('main')} />;
+        return <LandingPage onStart={() => setAppState('apiKey')} />;
     }
 
-    if (!session) {
-        return <Login />;
-    }
-
-    if (!apiKey) {
+    if (appState === 'apiKey') {
         return <ApiKeySetup onKeySubmit={handleKeySubmit} />;
     }
 

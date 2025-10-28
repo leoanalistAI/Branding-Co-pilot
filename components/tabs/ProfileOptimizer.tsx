@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { optimizeProfileService } from '../../services/geminiService';
 import { AppContext, OptimizedProfile, HistoryItem } from '../../types';
 import { fileToBase64, downloadAsMarkdown } from '../../utils/fileUtils';
@@ -13,7 +14,7 @@ interface ProfileOptimizerProps {
     history: HistoryItem[];
 }
 
-const ProfileOptimizer: FC<ProfileOptimizerProps> = ({ appContext, history }) => {
+const ProfileOptimizer: React.FC<ProfileOptimizerProps> = ({ appContext, history }) => {
     const [currentBio, setCurrentBio] = useState('');
     const [platform, setPlatform] = useState('Instagram');
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -30,7 +31,7 @@ const ProfileOptimizer: FC<ProfileOptimizerProps> = ({ appContext, history }) =>
         setImagePreview(null);
     }, [appContext.activeBrandId]);
 
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setImageFile(file);
@@ -53,7 +54,7 @@ const ProfileOptimizer: FC<ProfileOptimizerProps> = ({ appContext, history }) =>
         }
     };
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!imageFile) {
             setError('Por favor, envie um print do seu perfil.');

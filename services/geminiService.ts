@@ -1,3 +1,5 @@
+
+
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import {
     AppContext,
@@ -19,7 +21,7 @@ import {
     CarouselResult,
     Source
 } from '../types';
-import { API_KEY_STORAGE_KEY } from "../src/constants";
+import { API_KEY_STORAGE_KEY } from "../App";
 
 const getAiClient = (): GoogleGenAI => {
     const apiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
@@ -67,7 +69,7 @@ const generateContentWithSchema = async <T>(prompt: string, schema: any, useSear
         config: config
     });
     
-    const text = cleanJsonString(response.text || '');
+    const text = cleanJsonString(response.text);
 
     let data: T;
     try {
@@ -222,7 +224,7 @@ export const optimizeProfileService = async (
         }
     });
     
-    const text = cleanJsonString(response.text || '');
+    const text = cleanJsonString(response.text);
     return JSON.parse(text);
 };
 
@@ -294,16 +296,7 @@ export const createEditorialCalendarService = (
     const prompt = `
         Crie um calendário editorial com ${numPosts} posts sobre o tema "${theme}" para as plataformas: ${platforms.join(', ')}.
         ${contextPrompt}
-        
-        Para cada post, gere um tópico específico e uma ideia de conteúdo detalhada.
-        O resultado deve ser um JSON com uma lista de ${numPosts} objetos. Para a data, use um formato relativo como "Dia 1", "Dia 2".
-        NÃO adicione markdown.
-
-        Cada objeto na lista deve ter a seguinte estrutura:
-        - "date": (string) A data relativa do post (ex: "Dia 1").
-        - "platform": (string) A plataforma para o post (ex: "Instagram").
-        - "topic": (string) Um título ou tópico específico e atraente para o post.
-        - "contentIdea": (string) Uma descrição detalhada da ideia de conteúdo para o post, incluindo o formato (ex: Carrossel, Vídeo Curto, Artigo de Blog) e os pontos principais a serem abordados.
+        O resultado deve ser um JSON com uma lista de objetos. Para a data, use um formato relativo como "Dia 1", "Dia 2". NÃO adicione markdown.
     `;
     return generateContentWithSchema<EditorialCalendarPost[]>(prompt, {
         type: Type.ARRAY,
@@ -444,7 +437,7 @@ export const analyzeVideoService = async (
         }
     });
 
-    const text = cleanJsonString(response.text || '');
+    const text = cleanJsonString(response.text);
     return JSON.parse(text);
 };
 
@@ -617,7 +610,7 @@ export const generateImageService = async (prompt: string, aspectRatio: string):
         },
     });
 
-    const base64ImageBytes = response.generatedImages?.[0]?.image?.imageBytes;
+    const base64ImageBytes: string = response.generatedImages[0].image.imageBytes;
     if (!base64ImageBytes) {
         throw new Error("API did not return an image.");
     }
@@ -650,9 +643,9 @@ export const editImageService = async (prompt: string, imageBase64: string, imag
         },
     });
 
-    for (const part of response.candidates?.[0]?.content.parts || []) {
+    for (const part of response.candidates[0].content.parts) {
         if (part.inlineData) {
-            const base64ImageBytes = part.inlineData.data;
+            const base64ImageBytes: string = part.inlineData.data;
             if (base64ImageBytes) {
                 return {
                     base64: base64ImageBytes,

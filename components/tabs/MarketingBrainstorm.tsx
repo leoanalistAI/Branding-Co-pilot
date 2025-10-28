@@ -1,4 +1,5 @@
-import React, { useState, useEffect, FC, FormEvent } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { brainstormMarketingIdeasService } from '../../services/geminiService';
 import { AppContext, BrainstormIdea, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -14,7 +15,7 @@ interface MarketingBrainstormProps {
     history: HistoryItem[];
 }
 
-const MarketingBrainstorm: FC<MarketingBrainstormProps> = ({ appContext, history }) => {
+const MarketingBrainstorm: React.FC<MarketingBrainstormProps> = ({ appContext, history }) => {
     const [topic, setTopic] = useState('');
     const [useGlobalContext, setUseGlobalContext] = useState(true);
     const [ideas, setIdeas] = useState<BrainstormIdea[] | null>(null);
@@ -28,7 +29,7 @@ const MarketingBrainstorm: FC<MarketingBrainstormProps> = ({ appContext, history
         setSources([]);
     }, [appContext.activeBrandId]);
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);

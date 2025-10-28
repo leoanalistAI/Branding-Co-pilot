@@ -1,4 +1,5 @@
-import { useState, useEffect, FC, FormEvent } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { generateCopyService, createScriptService, generateCarouselService } from '../../services/geminiService';
 import { AppContext, CopywritingResult, ScriptResult, CarouselResult, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -26,7 +27,7 @@ const RadioPill = ({ label, value, checked, onChange }: { label: string, value: 
     </label>
 );
 
-const ContentStudio: FC<ContentStudioProps> = ({ appContext, history }) => {
+const ContentStudio: React.FC<ContentStudioProps> = ({ appContext, history }) => {
     // Main type
     const [contentType, setContentType] = useState<ContentType>('Post');
 
@@ -70,7 +71,7 @@ const ContentStudio: FC<ContentStudioProps> = ({ appContext, history }) => {
         setSources([]);
     }, [appContext.activeBrandId]);
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);

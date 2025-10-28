@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
 import FunnelToolbar from './FunnelToolbar';
 import FunnelNode from './FunnelNode';
@@ -9,7 +9,7 @@ interface FunnelBuilderProps {
     appContext: AppContext;
 }
 
-const FunnelBuilder: FC<FunnelBuilderProps> = ({ appContext }) => {
+const FunnelBuilder: React.FC<FunnelBuilderProps> = ({ appContext }) => {
     const [stages, setStages] = useState<FunnelStage[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStage, setSelectedStage] = useState<FunnelStage | null>(null);

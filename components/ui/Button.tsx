@@ -1,15 +1,15 @@
-import { FC, ButtonHTMLAttributes, ReactNode } from 'react';
+import React from 'react';
 import { cn } from '../../lib/utils';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    children: ReactNode;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    children: React.ReactNode;
     isLoading?: boolean;
     variant?: 'primary' | 'secondary';
-    icon?: ReactNode;
+    icon?: React.ReactNode;
     size?: 'sm' | 'md' | 'lg';
 }
 
-const Button: FC<ButtonProps> = ({ children, isLoading = false, variant = 'primary', icon, size = 'md', className, ...props }) => {
+const Button: React.FC<ButtonProps> = ({ children, isLoading = false, variant = 'primary', icon, size = 'md', className, ...props }) => {
     const baseClasses = "flex items-center justify-center gap-2 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed";
 
     const variantClasses = {

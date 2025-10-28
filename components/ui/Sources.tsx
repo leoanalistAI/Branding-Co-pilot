@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React from 'react';
 import { Source } from '../../types';
 import { LinkIcon } from '../icons/Icons';
 
@@ -6,7 +6,7 @@ interface SourcesProps {
     sources: Source[];
 }
 
-const Sources: FC<SourcesProps> = ({ sources }) => {
+const Sources: React.FC<SourcesProps> = ({ sources }) => {
     if (!sources || sources.length === 0) {
         return null;
     }

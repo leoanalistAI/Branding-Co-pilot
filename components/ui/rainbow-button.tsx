@@ -1,13 +1,13 @@
-import { FC, ButtonHTMLAttributes, ReactNode } from "react";
+import React from "react";
 import { cn } from "../../lib/utils";
 
 interface RainbowButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
   className?: string;
 }
 
-export const RainbowButton: FC<RainbowButtonProps> = ({
+export const RainbowButton: React.FC<RainbowButtonProps> = ({
   children,
   className,
   ...props

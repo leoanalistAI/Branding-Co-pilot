@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FC } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FunnelStage } from '../../../types';
 import { Card } from '../../ui/Card';
 import Button from '../../ui/Button';
@@ -21,7 +21,7 @@ const iconMap = {
     TrophyIcon
 };
 
-const FunnelNode: FC<FunnelNodeProps> = ({ stage, index, totalStages, onUpdate, onRemove, onMove, onGetSuggestions }) => {
+const FunnelNode: React.FC<FunnelNodeProps> = ({ stage, index, totalStages, onUpdate, onRemove, onMove, onGetSuggestions }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [title, setTitle] = useState(stage.title);
     const [description, setDescription] = useState(stage.description);
@@ -56,7 +56,7 @@ const FunnelNode: FC<FunnelNodeProps> = ({ stage, index, totalStages, onUpdate, 
     const Icon = iconMap[stage.icon];
 
     return (
-        <Card ref={cardRef} className="relative group p-4">
+        <Card className="relative group p-4">
             <div className="flex gap-4">
                 <div className="flex-shrink-0">
                     <span className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-neutral-800">

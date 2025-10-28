@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { generateImageService, editImageService } from '../../services/geminiService';
 import { AppContext, ImageResult, HistoryItem } from '../../types';
 import Button from '../ui/Button';
@@ -13,7 +13,7 @@ interface ImageGeneratorProps {
     history: HistoryItem[];
 }
 
-const ImageGenerator: FC<ImageGeneratorProps> = ({ appContext, history }) => {
+const ImageGenerator: React.FC<ImageGeneratorProps> = ({ appContext, history }) => {
     const [prompt, setPrompt] = useState('');
     const [aspectRatio, setAspectRatio] = useState('1:1');
     const [result, setResult] = useState<ImageResult | null>(null);
@@ -28,7 +28,7 @@ const ImageGenerator: FC<ImageGeneratorProps> = ({ appContext, history }) => {
         setResult(null);
     }, [appContext.activeBrandId]);
 
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setReferenceImageFile(file);
@@ -48,7 +48,7 @@ const ImageGenerator: FC<ImageGeneratorProps> = ({ appContext, history }) => {
         }
     }
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
