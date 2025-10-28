@@ -1,5 +1,3 @@
-
-
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import {
     AppContext,
@@ -296,7 +294,16 @@ export const createEditorialCalendarService = (
     const prompt = `
         Crie um calendário editorial com ${numPosts} posts sobre o tema "${theme}" para as plataformas: ${platforms.join(', ')}.
         ${contextPrompt}
-        O resultado deve ser um JSON com uma lista de objetos. Para a data, use um formato relativo como "Dia 1", "Dia 2". NÃO adicione markdown.
+        
+        Para cada post, gere um tópico específico e uma ideia de conteúdo detalhada.
+        O resultado deve ser um JSON com uma lista de ${numPosts} objetos. Para a data, use um formato relativo como "Dia 1", "Dia 2".
+        NÃO adicione markdown.
+
+        Cada objeto na lista deve ter a seguinte estrutura:
+        - "date": (string) A data relativa do post (ex: "Dia 1").
+        - "platform": (string) A plataforma para o post (ex: "Instagram").
+        - "topic": (string) Um título ou tópico específico e atraente para o post.
+        - "contentIdea": (string) Uma descrição detalhada da ideia de conteúdo para o post, incluindo o formato (ex: Carrossel, Vídeo Curto, Artigo de Blog) e os pontos principais a serem abordados.
     `;
     return generateContentWithSchema<EditorialCalendarPost[]>(prompt, {
         type: Type.ARRAY,
