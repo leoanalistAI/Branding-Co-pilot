@@ -110,7 +110,7 @@ const FoundationAndPersonas: FC<FoundationAndPersonasProps> = ({ appContext }) =
             setTransformation('');
             setPersonality('Profissional e Confiável');
         }
-    }, [appContext.brandDna, appContext.activeBrandId, appContext.history.dna]);
+    }, [appContext.brandDna, appContext.activeBrandId, appContext.history.dna, isEditingFromHistory]);
     
     const handleArchetypeSelect = (archetype: Archetype) => {
         setSelectedArchetype(archetype);
