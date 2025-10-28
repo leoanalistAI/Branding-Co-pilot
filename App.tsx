@@ -54,10 +54,11 @@ export const API_KEY_STORAGE_KEY = 'brandingCopilotApiKey_v1';
 
 const App: React.FC = () => {
     const [appState, setAppState] = React.useState<AppState>('landing');
-    const [activeTab, setActiveTab] = React.useState<Tab>('dna');
+    const [activeTab, setActiveTab] = React.useState<Tab>('brainstorm');
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [prefillData, setPrefillData] = React.useState<{ tab: string; data: any } | null>(null);
     const [activeBrandId, setActiveBrandId] = React.useState<string | null>(null);
+    const [isContextCollapsed, setIsContextCollapsed] = React.useState(false);
 
     const [history, setHistory] = React.useState<HistoryState>(() => {
         try {
@@ -316,7 +317,12 @@ const App: React.FC = () => {
                 />
             ))}
         </nav>
-        <ContextSummary context={appContext} onChangeApiKey={handleChangeApiKey} />
+        <ContextSummary 
+            context={appContext} 
+            onChangeApiKey={handleChangeApiKey}
+            isCollapsed={isContextCollapsed}
+            onToggleCollapse={() => setIsContextCollapsed(!isContextCollapsed)}
+        />
       </>
     );
 

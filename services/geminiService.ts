@@ -1,5 +1,3 @@
-
-
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import {
     AppContext,
@@ -69,7 +67,7 @@ const generateContentWithSchema = async <T>(prompt: string, schema: any, useSear
         config: config
     });
     
-    const text = cleanJsonString(response.text);
+    const text = cleanJsonString(response.text ?? '');
 
     let data: T;
     try {
@@ -224,7 +222,7 @@ export const optimizeProfileService = async (
         }
     });
     
-    const text = cleanJsonString(response.text);
+    const text = cleanJsonString(response.text ?? '');
     return JSON.parse(text);
 };
 
@@ -296,21 +294,32 @@ export const createEditorialCalendarService = (
     const prompt = `
         Crie um calendário editorial com ${numPosts} posts sobre o tema "${theme}" para as plataformas: ${platforms.join(', ')}.
         ${contextPrompt}
-        O resultado deve ser um JSON com uma lista de objetos. Para a data, use um formato relativo como "Dia 1", "Dia 2". NÃO adicione markdown.
+        O resultado deve ser um JSON com um objeto contendo uma chave "posts", que é uma lista de objetos. Para a data, use um formato relativo como "Dia 1", "Dia 2". NÃO adicione markdown.
     `;
-    return generateContentWithSchema<EditorialCalendarPost[]>(prompt, {
-        type: Type.ARRAY,
-        items: {
-            type: Type.OBJECT,
-            properties: {
-                date: { type: Type.STRING },
-                platform: { type: Type.STRING },
-                topic: { type: Type.STRING },
-                contentIdea: { type: Type.STRING },
-            },
-            required: ['date', 'platform', 'topic', 'contentIdea']
-        }
-    }, true);
+    return generateContentWithSchema<{ posts: EditorialCalendarPost[] }>(prompt, {
+        type: Type.OBJECT,
+        properties: {
+            posts: {
+                type: Type.ARRAY,
+                items: {
+                    type: Type.OBJECT,
+                    properties: {
+                        date: { type: Type.STRING },
+                        platform: { type: Type.STRING },
+                        topic: { type: Type.STRING },
+                        contentIdea: { type: Type.STRING },
+                    },
+                    required: ['date', 'platform', 'topic', 'contentIdea']
+                }
+            }
+        },
+        required: ['posts']
+    }, true).then(response => {
+        return {
+            data: response.data.posts,
+            sources: response.sources
+        };
+    });
 };
 
 export const analyzeCompetitorService = (
@@ -437,7 +446,7 @@ export const analyzeVideoService = async (
         }
     });
 
-    const text = cleanJsonString(response.text);
+    const text = cleanJsonString(response.text ?? '');
     return JSON.parse(text);
 };
 
@@ -610,7 +619,7 @@ export const generateImageService = async (prompt: string, aspectRatio: string):
         },
     });
 
-    const base64ImageBytes: string = response.generatedImages[0].image.imageBytes;
+    const base64ImageBytes: string | undefined = response.generatedImages?.[0]?.image.imageBytes;
     if (!base64ImageBytes) {
         throw new Error("API did not return an image.");
     }
@@ -643,9 +652,9 @@ export const editImageService = async (prompt: string, imageBase64: string, imag
         },
     });
 
-    for (const part of response.candidates[0].content.parts) {
+    for (const part of response.candidates?.[0]?.content.parts ?? []) {
         if (part.inlineData) {
-            const base64ImageBytes: string = part.inlineData.data;
+            const base64ImageBytes: string | undefined = part.inlineData.data;
             if (base64ImageBytes) {
                 return {
                     base64: base64ImageBytes,
