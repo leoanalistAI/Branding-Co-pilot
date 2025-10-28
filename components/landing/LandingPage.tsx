@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { SplineScene } from "../ui/spline";
 import { Spotlight } from "../ui/spotlight";
 import { RainbowButton } from '../ui/rainbow-button';

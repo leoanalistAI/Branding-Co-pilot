@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC, FormEvent } from 'react';
+import { useState, useEffect, FC, FormEvent } from 'react';
 import { analyzeCompetitorService, findPeersService } from '@/src/services/aiService';
 import { AppContext, CompetitorAnalysis, Source, HistoryItem, FoundCompetitor } from '@/types';
 import Button from '@/components/ui/Button';

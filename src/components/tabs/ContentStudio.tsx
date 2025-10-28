@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC, FormEvent } from 'react';
+import { useState, useEffect, FC, FormEvent } from 'react';
 import { generateCopyService, createScriptService, generateCarouselService } from '@/src/services/aiService';
 import { AppContext, CopywritingResult, ScriptResult, CarouselResult, Source, HistoryItem } from '@/types';
 import Button from '@/components/ui/Button';

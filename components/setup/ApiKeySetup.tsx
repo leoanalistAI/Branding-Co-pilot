@@ -1,4 +1,4 @@
-import React, { useState, FC, FormEvent } from 'react';
+import { useState, FC, FormEvent } from 'react';
 import Button from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/Card';
 import { SplineScene } from '../ui/spline';

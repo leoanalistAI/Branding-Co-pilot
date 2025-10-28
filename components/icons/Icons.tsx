@@ -1,4 +1,4 @@
-import React, { FC, SVGProps } from 'react';
+import { FC, SVGProps } from 'react';
 
 // A generic icon props type
 type IconProps = SVGProps<SVGSVGElement>;

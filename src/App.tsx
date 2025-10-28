@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/src/integrations/supabase/client';
 import TabButton from '@/components/ui/TabButton';
@@ -35,6 +35,7 @@ import {
 } from '@/components/icons/Icons';
 import { AppContext, HistoryItem } from '@/types';
 import { useHistory } from '@/src/hooks/useHistory';
+import { API_KEY_STORAGE_KEY } from './constants';
 
 type Tab =
     | 'dna'
@@ -52,7 +53,6 @@ type Tab =
 type AppState = 'landing' | 'main';
     
 const APP_STATE_KEY = 'brandingCopilotAppState_v2';
-export const API_KEY_STORAGE_KEY = 'brandingCopilotApiKey_v1';
 
 
 const App: FC = () => {

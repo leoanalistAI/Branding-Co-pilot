@@ -1,4 +1,4 @@
-import { GoogleGenAI, Modality } from "@google/genai";
+import { GoogleGenAI, Modality, Type } from "@google/genai";
 import {
     AppContext,
     GroundedResponse,
@@ -19,7 +19,7 @@ import {
     CarouselResult,
     Source
 } from '@/types';
-import { API_KEY_STORAGE_KEY } from "@/src/App";
+import { API_KEY_STORAGE_KEY } from "@/src/constants";
 import * as Prompts from './ai/prompts';
 
 const getAiClient = (): GoogleGenAI => {
@@ -65,7 +65,7 @@ const generateContentWithSchema = async <T>(prompt: string, schema: any, useSear
         config: config
     });
     
-    const text = cleanJsonString(response.text);
+    const text = cleanJsonString(response.text || '');
 
     let data: T;
     try {
@@ -106,7 +106,7 @@ export const optimizeProfileService = async (platform: string, imageBase64: stri
         config: { responseMimeType: "application/json", responseSchema: schema }
     });
     
-    const text = cleanJsonString(response.text);
+    const text = cleanJsonString(response.text || '');
     return JSON.parse(text);
 };
 
@@ -151,7 +151,7 @@ export const analyzeVideoService = async (videoBase64: string, videoMimeType: st
         config: { responseMimeType: "application/json", responseSchema: schema }
     });
 
-    const text = cleanJsonString(response.text);
+    const text = cleanJsonString(response.text || '');
     return JSON.parse(text);
 };
 
@@ -187,7 +187,7 @@ export const generateImageService = async (prompt: string, aspectRatio: string):
         },
     });
 
-    const base64ImageBytes: string = response.generatedImages[0].image.imageBytes;
+    const base64ImageBytes = response.generatedImages?.[0]?.image?.imageBytes;
     if (!base64ImageBytes) {
         throw new Error("API did not return an image.");
     }
@@ -206,9 +206,9 @@ export const editImageService = async (prompt: string, imageBase64: string, imag
         config: { responseModalities: [Modality.IMAGE] },
     });
 
-    for (const part of response.candidates[0].content.parts) {
+    for (const part of response.candidates?.[0]?.content.parts || []) {
         if (part.inlineData) {
-            const base64ImageBytes: string = part.inlineData.data;
+            const base64ImageBytes = part.inlineData.data;
             if (base64ImageBytes) {
                 return { base64: base64ImageBytes, prompt: prompt };
             }

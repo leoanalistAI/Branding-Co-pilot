@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FC } from 'react';
+import { useState, useEffect, useRef, FC } from 'react';
 import { FunnelStage } from '@/types';
 import { Card } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC, FormEvent } from 'react';
+import { useState, useEffect, FC, FormEvent } from 'react';
 import { generateBrandDnaService, generateAudienceAvatarService } from '@/src/services/aiService';
 import { AppContext, BrandDna, AudienceAvatar, Source, HistoryItem } from '@/types';
 import Button from '@/components/ui/Button';

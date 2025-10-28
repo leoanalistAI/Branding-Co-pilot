@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react';
+import { useState, FC } from 'react';
 import { HistoryItem } from '../../types';
 import { TrashIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons/Icons';
 

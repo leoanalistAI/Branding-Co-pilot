@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC, FormEvent } from 'react';
+import { useState, useEffect, FC, FormEvent } from 'react';
 import { generateSeoAnalysisService } from '@/src/services/aiService';
 import { AppContext, SeoAnalysisResult, Source, HistoryItem } from '@/types';
 import Button from '@/components/ui/Button';

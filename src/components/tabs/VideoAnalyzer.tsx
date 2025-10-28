@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
 import { AppContext, VideoAnalysisResult, HistoryItem } from '@/types';
 import { analyzeVideoService } from '@/src/services/aiService';
 import { fileToBase64, downloadAsMarkdown } from '@/utils/fileUtils';

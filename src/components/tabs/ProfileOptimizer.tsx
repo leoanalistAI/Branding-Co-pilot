@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, useRef, FC, ChangeEvent, FormEvent } from 'react';
 import { optimizeProfileService } from '@/src/services/aiService';
 import { AppContext, OptimizedProfile, HistoryItem } from '@/types';
 import { fileToBase64, downloadAsMarkdown } from '@/utils/fileUtils';

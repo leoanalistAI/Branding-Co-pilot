@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC } from 'react';
 import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '@/types';
 import { generateFunnelStageSuggestionsService } from '@/src/services/aiService';
 import Spinner from '@/components/ui/Spinner';

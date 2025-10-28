@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { AppContext } from '@/types';
 import { supabase } from '@/src/integrations/supabase/client';
 import { ChevronDownIcon, ChevronUpIcon } from '../icons/Icons';
