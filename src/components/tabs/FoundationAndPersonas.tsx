@@ -87,7 +87,7 @@ const FoundationAndPersonas: FC<FoundationAndPersonasProps> = ({ appContext }) =
                         Defina a base da sua marca. Esta é a etapa mais importante e servirá de contexto para todas as outras ferramentas.
                     </p>
 
-                    <form onSubmit={handleGenerateDna} className="space-y-6 bg-neutral-900 p-6 rounded-lg">
+                    <form onSubmit={handleGenerateDna} className="space-y-6 bg-neutral-900 p-6 rounded-lg" autoComplete="off">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-neutral-300 mb-2">Seu Nome ou Nome do Projeto</label>
