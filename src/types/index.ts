@@ -31,6 +31,7 @@ export interface HistoryItem {
   result: any;
   sources?: Source[];
   avatarSources?: Source[];
+  audienceAvatar?: AudienceAvatar; // Adicionado para armazenar o avatar
 }
 
 export interface HistoryState {
