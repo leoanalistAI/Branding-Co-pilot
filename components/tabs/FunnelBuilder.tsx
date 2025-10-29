@@ -1,9 +1,11 @@
+
+
 import React, { useState, useEffect } from 'react';
-import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
-import FunnelToolbar from './FunnelToolbar';
-import FunnelNode from './FunnelNode';
-import SuggestionsModal from './SuggestionsModal';
-import { FunnelIcon } from '../../icons/Icons';
+import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../types';
+import FunnelToolbar from './funnel/FunnelToolbar';
+import FunnelNode from './funnel/FunnelNode';
+import SuggestionsModal from './funnel/SuggestionsModal';
+import { FunnelIcon } from '../icons/Icons';
 
 interface FunnelBuilderProps {
     appContext: AppContext;
@@ -22,10 +24,11 @@ const FunnelBuilder: React.FC<FunnelBuilderProps> = ({ appContext }) => {
     const saveFunnelToHistory = (currentStages: FunnelStage[]) => {
         if (!appContext.activeBrandId || currentStages.length === 0) return;
         
+// FIX: Removed unnecessary optional chaining for appContext method.
         appContext.addToHistory('funnel', {
             id: Date.now().toString(),
             timestamp: new Date().toISOString(),
-            type: 'Jornada da Audiência',
+            type: 'Funil de Marketing',
             summary: `${currentStages.length} etapas`,
             result: { stages: currentStages },
         });
@@ -80,8 +83,8 @@ const FunnelBuilder: React.FC<FunnelBuilderProps> = ({ appContext }) => {
     return (
         <div className="p-6 lg:p-8 h-full">
             <header className="mb-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-neutral-100">Construtor de Jornada da Audiência</h2>
-                <p className="text-neutral-400 mt-1">Mapeie a jornada do seu seguidor, de desconhecido a fã da sua marca.</p>
+                <h2 className="text-2xl md:text-3xl font-bold text-neutral-100">Construtor de Funil</h2>
+                <p className="text-neutral-400 mt-1">Crie e visualize seus funis de marketing com a ajuda da IA.</p>
             </header>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -105,7 +108,7 @@ const FunnelBuilder: React.FC<FunnelBuilderProps> = ({ appContext }) => {
                         {stages.length === 0 && (
                             <div className="text-center py-16 border-2 border-dashed border-neutral-700 rounded-lg">
                                 <FunnelIcon className="mx-auto h-12 w-12 text-neutral-500" />
-                                <h3 className="mt-2 text-sm font-medium text-neutral-200">Sua jornada está vazia</h3>
+                                <h3 className="mt-2 text-sm font-medium text-neutral-200">Seu funil está vazio</h3>
                                 <p className="mt-1 text-sm text-neutral-400">Adicione etapas usando o painel ao lado.</p>
                             </div>
                         )}

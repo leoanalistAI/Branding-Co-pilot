@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
-import { useAppContext } from '../../../context/AppContext';
+import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
 import { generateFunnelStageSuggestionsService } from '../../../services/geminiService';
 import Spinner from '../../ui/Spinner';
 import { XMarkIcon, SparklesIcon } from '../../icons/Icons';
@@ -11,11 +10,11 @@ interface SuggestionsModalProps {
     isOpen: boolean;
     onClose: () => void;
     stage: FunnelStage;
+    appContext: AppContext;
     onUpdateSuggestions: (stageId: string, suggestions: FunnelStageSuggestions, sources: Source[]) => void;
 }
 
-const SuggestionsModal: React.FC<SuggestionsModalProps> = ({ isOpen, onClose, stage, onUpdateSuggestions }) => {
-    const appContext = useAppContext();
+const SuggestionsModal: React.FC<SuggestionsModalProps> = ({ isOpen, onClose, stage, appContext, onUpdateSuggestions }) => {
     const [suggestions, setSuggestions] = useState<FunnelStageSuggestions | null>(null);
     const [sources, setSources] = useState<Source[]>([]);
     const [isLoading, setIsLoading] = useState(false);

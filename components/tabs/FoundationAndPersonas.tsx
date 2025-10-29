@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { generateBrandDnaService, generateAudienceAvatarService } from '../../services/geminiService';
-import { BrandDna, AudienceAvatar, Source, HistoryItem } from '../../types';
-import { useAppContext } from '../../context/AppContext';
+import { AppContext, BrandDna, AudienceAvatar, Source, HistoryItem } from '../../types';
 import Button from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/Card';
 import Spinner from '../ui/Spinner';
@@ -9,6 +8,10 @@ import HistorySidebar from '../ui/HistorySidebar';
 import Sources from '../ui/Sources';
 import { downloadAsMarkdown } from '../../utils/fileUtils';
 import { ArrowDownTrayIcon, UsersIcon, BriefcaseIcon, AcademicCapIcon, CheckIcon } from '../icons/Icons';
+
+interface FoundationAndPersonasProps {
+    appContext: AppContext;
+}
 
 type Archetype = 'expert' | 'rising' | 'freelancer';
 
@@ -55,10 +58,7 @@ const archetypes = {
 };
 
 
-const FoundationAndPersonas: React.FC = () => {
-    const appContext = useAppContext();
-    const { brandDna, activeBrandId, history, addToHistory, setActiveBrand, removeFromHistory, clearHistory } = appContext;
-
+const FoundationAndPersonas: React.FC<FoundationAndPersonasProps> = ({ appContext }) => {
     const [name, setName] = useState('');
     const [purpose, setPurpose] = useState('');
     const [expertise, setExpertise] = useState('');
@@ -78,10 +78,10 @@ const FoundationAndPersonas: React.FC = () => {
     const [activeHistoryId, setActiveHistoryId] = useState<string | null>(null);
 
     useEffect(() => {
-        if (brandDna && activeBrandId) {
-            setBrandDnaResult(brandDna);
-            setActiveHistoryId(activeBrandId);
-            const activeItem = history.dna.find(item => item.id === activeBrandId);
+        if (appContext.brandDna && appContext.activeBrandId) {
+            setBrandDnaResult(appContext.brandDna);
+            setActiveHistoryId(appContext.activeBrandId);
+            const activeItem = appContext.history.dna.find(item => item.id === appContext.activeBrandId);
             if (activeItem) {
                 setAvatarResult(activeItem.result.avatar || null);
                 // When loading from history, we don't have an archetype, but we can show the form
@@ -95,7 +95,7 @@ const FoundationAndPersonas: React.FC = () => {
             setActiveHistoryId(null);
             setSelectedArchetype(null);
         }
-    }, [brandDna, activeBrandId, history.dna]);
+    }, [appContext.brandDna, appContext.activeBrandId, appContext.history.dna]);
     
     const handleArchetypeSelect = (archetype: Archetype) => {
         setSelectedArchetype(archetype);
@@ -129,8 +129,8 @@ const FoundationAndPersonas: React.FC = () => {
                 inputs: { name, purpose, expertise, audience, transformation, personality },
                 result: { dna: data, sources, avatar: null },
             };
-            addToHistory('dna', newItem);
-            setActiveBrand(newItem);
+            appContext.addToHistory('dna', newItem);
+            appContext.setActiveBrand(newItem);
 
         } catch (err) {
             setError('Falha ao gerar o DNA da Marca. Por favor, tente novamente.');
@@ -141,7 +141,7 @@ const FoundationAndPersonas: React.FC = () => {
     };
     
     const handleAvatarSubmit = async () => {
-        if (!brandDnaResult || !activeBrandId) return;
+        if (!brandDnaResult || !appContext.activeBrandId) return;
         setIsLoadingAvatar(true);
         setError(null);
         setAvatarResult(null);
@@ -152,7 +152,7 @@ const FoundationAndPersonas: React.FC = () => {
             setAvatarResult(data);
             setAvatarSources(sources);
             
-            const currentItem = history.dna.find(item => item.id === activeBrandId);
+            const currentItem = appContext.history.dna.find(item => item.id === appContext.activeBrandId);
             if (currentItem) {
                 const updatedItem = {
                     ...currentItem,
@@ -162,7 +162,7 @@ const FoundationAndPersonas: React.FC = () => {
                         avatarSources: sources
                     }
                 };
-                addToHistory('dna', updatedItem);
+                appContext.addToHistory('dna', updatedItem);
             }
 
         } catch (err) {
@@ -187,7 +187,7 @@ const FoundationAndPersonas: React.FC = () => {
         setAvatarResult(result.avatar || null);
         setAvatarSources(result.avatarSources || []);
         
-        setActiveBrand(item);
+        appContext.setActiveBrand(item);
     };
 
     const handleDownload = () => {
@@ -325,10 +325,10 @@ const FoundationAndPersonas: React.FC = () => {
                 </div>
             </div>
              <HistorySidebar
-                history={history.dna}
+                history={appContext.history.dna}
                 onSelect={handleHistorySelect}
-                onDelete={(id) => removeFromHistory('dna', id)}
-                onClear={() => clearHistory('dna')}
+                onDelete={(id) => appContext.removeFromHistory('dna', id)}
+                onClear={() => appContext.clearHistory('dna')}
                 activeItemId={activeHistoryId}
             />
         </div>
