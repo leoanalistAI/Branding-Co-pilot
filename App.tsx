@@ -3,11 +3,9 @@ import TabButton from './components/ui/TabButton';
 import ContextSummary from './components/ui/ContextSummary';
 import FoundationAndPersonas from './components/tabs/FoundationAndPersonas';
 import ContentStudio from './components/tabs/ContentStudio';
-import ProductDeveloper from './components/tabs/ProductDeveloper';
 import MarketingBrainstorm from './components/tabs/MarketingBrainstorm';
 import EditorialCalendar from './components/tabs/EditorialCalendar';
 import CompetitorAnalyzer from './components/tabs/CompetitorAnalyzer';
-import FunnelBuilder from './components/tabs/funnel/FunnelBuilder';
 import VideoAnalyzer from './components/tabs/VideoAnalyzer';
 import SeoAssistant from './components/tabs/SeoAssistant';
 import ImageGenerator from './components/tabs/ImageGenerator';
@@ -16,12 +14,10 @@ import ProfileOptimizer from './components/tabs/ProfileOptimizer';
 import ApiKeySetup from './components/setup/ApiKeySetup';
 import {
     IdentificationIcon,
-    CubeIcon,
     PencilSquareIcon,
     LightBulbIcon,
     CalendarDaysIcon,
     UsersIcon,
-    FunnelIcon,
     VideoCameraIcon,
     MenuIcon,
     XMarkIcon,
@@ -36,11 +32,9 @@ type Tab =
     | 'dna'
     | 'profile'
     | 'contentStudio'
-    | 'product'
     | 'brainstorm'
     | 'calendar'
     | 'competitor'
-    | 'funnel'
     | 'video'
     | 'seo'
     | 'image';
@@ -54,7 +48,7 @@ export const API_KEY_STORAGE_KEY = 'brandingCopilotApiKey_v1';
 
 const App: React.FC = () => {
     const [appState, setAppState] = React.useState<AppState>('landing');
-    const [activeTab, setActiveTab] = React.useState<Tab>('brainstorm');
+    const [activeTab, setActiveTab] = React.useState<Tab>('dna');
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [prefillData, setPrefillData] = React.useState<{ tab: string; data: any } | null>(null);
     const [activeBrandId, setActiveBrandId] = React.useState<string | null>(null);
@@ -261,17 +255,22 @@ const App: React.FC = () => {
     }
 
     const tabs = [
-        { id: 'dna', label: 'DNA da Marca Pessoal', icon: IdentificationIcon, component: <FoundationAndPersonas appContext={appContext} /> },
-        { id: 'profile', label: 'Otimizador de Perfil', icon: UserCircleIcon, component: <ProfileOptimizer appContext={appContext} history={getHistoryForTab('profile')} />, disabled: !isFoundationSet },
-        { id: 'contentStudio', label: 'Estúdio de Conteúdo', icon: PencilSquareIcon, component: <ContentStudio appContext={appContext} history={getHistoryForTab('contentStudio')} />, disabled: !isFoundationSet },
-        { id: 'seo', label: 'SEO Pessoal', icon: MagnifyingGlassIcon, component: <SeoAssistant appContext={appContext} history={getHistoryForTab('seo')} />, disabled: !isFoundationSet },
-        { id: 'image', label: 'Gerador de Imagens', icon: PhotoIcon, component: <ImageGenerator appContext={appContext} history={getHistoryForTab('image')} />, disabled: !isFoundationSet },
-        { id: 'product', label: 'Crie produtos e/ou serviços', icon: CubeIcon, component: <ProductDeveloper appContext={appContext} history={getHistoryForTab('product')} />, disabled: !isFoundationSet },
-        { id: 'brainstorm', label: 'Brainstorm de Marca', icon: LightBulbIcon, component: <MarketingBrainstorm appContext={appContext} history={getHistoryForTab('brainstorm')} />, disabled: !isFoundationSet },
-        { id: 'calendar', label: 'Calendário Editorial', icon: CalendarDaysIcon, component: <EditorialCalendar appContext={appContext} history={getHistoryForTab('calendar')} />, disabled: !isFoundationSet },
-        { id: 'competitor', label: 'Análise de Influência', icon: UsersIcon, component: <CompetitorAnalyzer appContext={appContext} history={getHistoryForTab('competitor')} />, disabled: !isFoundationSet },
-        { id: 'funnel', label: 'Jornada da Audiência', icon: FunnelIcon, component: <FunnelBuilder appContext={appContext} />, disabled: !isFoundationSet },
-        { id: 'video', label: 'Analisador de Vídeo', icon: VideoCameraIcon, component: <VideoAnalyzer appContext={appContext} history={getHistoryForTab('video')} />, disabled: !isFoundationSet },
+        { type: 'header', label: 'Fundação' },
+        { type: 'button', id: 'dna', label: 'DNA da Marca Pessoal', icon: IdentificationIcon, component: <FoundationAndPersonas appContext={appContext} /> },
+        
+        { type: 'header', label: 'Presença' },
+        { type: 'button', id: 'profile', label: 'Otimizador de Perfil', icon: UserCircleIcon, component: <ProfileOptimizer appContext={appContext} history={getHistoryForTab('profile')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'contentStudio', label: 'Estúdio de Conteúdo', icon: PencilSquareIcon, component: <ContentStudio appContext={appContext} history={getHistoryForTab('contentStudio')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'image', label: 'Gerador de Imagens', icon: PhotoIcon, component: <ImageGenerator appContext={appContext} history={getHistoryForTab('image')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'video', label: 'Analisador de Vídeo', icon: VideoCameraIcon, component: <VideoAnalyzer appContext={appContext} history={getHistoryForTab('video')} />, disabled: !isFoundationSet },
+
+        { type: 'header', label: 'Estratégia' },
+        { type: 'button', id: 'brainstorm', label: 'Brainstorm de Ideias', icon: LightBulbIcon, component: <MarketingBrainstorm appContext={appContext} history={getHistoryForTab('brainstorm')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'calendar', label: 'Calendário Editorial', icon: CalendarDaysIcon, component: <EditorialCalendar appContext={appContext} history={getHistoryForTab('calendar')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'seo', label: 'SEO Pessoal', icon: MagnifyingGlassIcon, component: <SeoAssistant appContext={appContext} history={getHistoryForTab('seo')} />, disabled: !isFoundationSet },
+
+        { type: 'header', label: 'Mercado' },
+        { type: 'button', id: 'competitor', label: 'Análise de Mercado', icon: UsersIcon, component: <CompetitorAnalyzer appContext={appContext} history={getHistoryForTab('competitor')} />, disabled: !isFoundationSet },
     ];
     
     if (appState === 'landing') {
@@ -282,8 +281,9 @@ const App: React.FC = () => {
         return <ApiKeySetup onKeySubmit={handleKeySubmit} />;
     }
 
-    const activeComponent = tabs.find(tab => tab.id === activeTab)?.component;
-    const activeTabLabel = tabs.find(tab => tab.id === activeTab)?.label;
+    const activeTabInfo = tabs.find(tab => tab.type === 'button' && tab.id === activeTab);
+    const activeComponent = activeTabInfo ? (activeTabInfo as any).component : null;
+    const activeTabLabel = activeTabInfo ? (activeTabInfo as any).label : '';
 
     const sidebarContent = (
       <>
@@ -305,17 +305,24 @@ const App: React.FC = () => {
                 <XMarkIcon className="w-6 h-6" />
             </button>
         </div>
-        <nav className="flex-grow p-4 space-y-2 overflow-y-auto">
-            {tabs.map(tab => (
-                <TabButton
-                    key={tab.id}
-                    label={tab.label}
-                    icon={tab.icon}
-                    isActive={activeTab === tab.id}
-                    onClick={() => handleTabClick(tab.id as Tab)}
-                    disabled={tab.disabled}
-                />
-            ))}
+        <nav className="flex-grow p-4 space-y-1 overflow-y-auto">
+            {tabs.map((tab, index) => {
+                if (tab.type === 'header') {
+                    // Add a key to the header element
+                    return <h3 key={`header-${index}`} className="px-3 pt-4 pb-1 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{tab.label}</h3>;
+                }
+                const buttonTab = tab as any; // Cast to access button properties
+                return (
+                    <TabButton
+                        key={buttonTab.id}
+                        label={buttonTab.label}
+                        icon={buttonTab.icon}
+                        isActive={activeTab === buttonTab.id}
+                        onClick={() => handleTabClick(buttonTab.id as Tab)}
+                        disabled={buttonTab.disabled}
+                    />
+                );
+            })}
         </nav>
         <ContextSummary 
             context={appContext} 
