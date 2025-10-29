@@ -3,9 +3,8 @@ import TabButton from './components/ui/TabButton';
 import ContextSummary from './components/ui/ContextSummary';
 import FoundationAndPersonas from './components/tabs/FoundationAndPersonas';
 import ContentStudio from './components/tabs/ContentStudio';
-import EditorialCalendar from './components/tabs/EditorialCalendar';
+import ContentStrategy from './components/tabs/ContentStrategy';
 import CompetitorAnalyzer from './components/tabs/CompetitorAnalyzer';
-import SeoAssistant from './components/tabs/SeoAssistant';
 import LandingPage from './components/landing/LandingPage';
 import ProfileOptimizer from './components/tabs/ProfileOptimizer';
 import ApiKeySetup from './components/setup/ApiKeySetup';
@@ -13,12 +12,10 @@ import {
     IdentificationIcon,
     PencilSquareIcon,
     LightBulbIcon,
-    CalendarDaysIcon,
     UsersIcon,
     MenuIcon,
     XMarkIcon,
     SparklesIcon,
-    MagnifyingGlassIcon,
     UserCircleIcon,
 } from './components/icons/Icons';
 import { AppContext, BrandDna, HistoryState, HistoryItem } from './types';
@@ -27,9 +24,8 @@ type Tab =
     | 'dna'
     | 'profile'
     | 'contentStudio'
-    | 'calendar'
-    | 'competitor'
-    | 'seo';
+    | 'strategy'
+    | 'competitor';
 
 type AppState = 'landing' | 'apiKey' | 'main';
     
@@ -255,8 +251,7 @@ const App: React.FC = () => {
         { type: 'button', id: 'contentStudio', label: 'Estúdio de Conteúdo', icon: PencilSquareIcon, component: <ContentStudio appContext={appContext} history={getHistoryForTab('contentStudio')} />, disabled: !isFoundationSet },
 
         { type: 'header', label: 'Estratégia' },
-        { type: 'button', id: 'calendar', label: 'Calendário Editorial', icon: CalendarDaysIcon, component: <EditorialCalendar appContext={appContext} history={getHistoryForTab('calendar')} />, disabled: !isFoundationSet },
-        { type: 'button', id: 'seo', label: 'SEO Pessoal', icon: MagnifyingGlassIcon, component: <SeoAssistant appContext={appContext} history={getHistoryForTab('seo')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'strategy', label: 'Estratégia de Conteúdo', icon: LightBulbIcon, component: <ContentStrategy appContext={appContext} history={getHistoryForTab('strategy')} />, disabled: !isFoundationSet },
 
         { type: 'header', label: 'Mercado' },
         { type: 'button', id: 'competitor', label: 'Análise de Mercado', icon: UsersIcon, component: <CompetitorAnalyzer appContext={appContext} history={getHistoryForTab('competitor')} />, disabled: !isFoundationSet },
