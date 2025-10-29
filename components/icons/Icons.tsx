@@ -1,4 +1,3 @@
-// Forcing update at to fix the persistent PlusIcon export issue.
 import React from 'react';
 
 // Generic Icon Props
