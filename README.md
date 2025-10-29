@@ -43,9 +43,9 @@ Siga os passos abaixo para executar o projeto.
 
 2.  **Configure sua Chave de API:**
     -   Crie um arquivo `.env.local` na raiz do projeto.
-    -   Adicione sua chave da API do Google Gemini:
+    -   Adicione sua chave da API do Google Gemini com o nome correto:
         ```
-        GEMINI_API_KEY=SUA_CHAVE_DE_API_AQUI
+        VITE_GEMINI_API_KEY=SUA_CHAVE_DE_API_AQUI
         ```
     -   Você pode obter sua chave no [Google AI Studio](https://aistudio.google.com/app/apikey).
 
