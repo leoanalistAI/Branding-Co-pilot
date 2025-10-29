@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { AppContext, FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
+import { FunnelStage, FunnelStageSuggestions, Source } from '../../../types';
+import { useAppContext } from '../../../context/AppContext';
 import FunnelToolbar from './FunnelToolbar';
 import FunnelNode from './FunnelNode';
 import SuggestionsModal from './SuggestionsModal';
 import { FunnelIcon } from '../../icons/Icons';
 
-interface FunnelBuilderProps {
-    appContext: AppContext;
-}
+const FunnelBuilder: React.FC = () => {
+    const appContext = useAppContext();
+    const { activeBrandId, addToHistory } = appContext;
 
-const FunnelBuilder: React.FC<FunnelBuilderProps> = ({ appContext }) => {
     const [stages, setStages] = useState<FunnelStage[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStage, setSelectedStage] = useState<FunnelStage | null>(null);
@@ -17,12 +17,12 @@ const FunnelBuilder: React.FC<FunnelBuilderProps> = ({ appContext }) => {
     // Clear results when active brand changes
     useEffect(() => {
         setStages([]);
-    }, [appContext.activeBrandId]);
+    }, [activeBrandId]);
     
     const saveFunnelToHistory = (currentStages: FunnelStage[]) => {
-        if (!appContext.activeBrandId || currentStages.length === 0) return;
+        if (!activeBrandId || currentStages.length === 0) return;
         
-        appContext.addToHistory('funnel', {
+        addToHistory('funnel', {
             id: Date.now().toString(),
             timestamp: new Date().toISOString(),
             type: 'Jornada da Audiência',
@@ -118,7 +118,6 @@ const FunnelBuilder: React.FC<FunnelBuilderProps> = ({ appContext }) => {
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     stage={selectedStage}
-                    appContext={appContext}
                     onUpdateSuggestions={handleUpdateStageSuggestions}
                 />
             )}
