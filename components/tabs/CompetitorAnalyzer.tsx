@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import Spinner from '../ui/Spinner';
 import Sources from '../ui/Sources';
 import { downloadAsMarkdown } from '../../utils/fileUtils';
-import { ArrowDownTrayIcon } from '../icons';
+import { ArrowDownTrayIcon } from '../icons/Icons';
 import HistorySidebar from '../ui/HistorySidebar';
 
 

@@ -7,7 +7,7 @@ import Spinner from '../ui/Spinner';
 import HistorySidebar from '../ui/HistorySidebar';
 import Sources from '../ui/Sources';
 import { downloadAsMarkdown } from '../../utils/fileUtils';
-import { ArrowDownTrayIcon, UsersIcon, BriefcaseIcon, AcademicCapIcon, CheckIcon } from '../icons';
+import { ArrowDownTrayIcon, UsersIcon, BriefcaseIcon, AcademicCapIcon, CheckIcon } from '../icons/Icons';
 
 interface FoundationAndPersonasProps {
     appContext: AppContext;

@@ -3,8 +3,12 @@ import TabButton from './components/ui/TabButton';
 import ContextSummary from './components/ui/ContextSummary';
 import FoundationAndPersonas from './components/tabs/FoundationAndPersonas';
 import ContentStudio from './components/tabs/ContentStudio';
-import ContentStrategy from './components/tabs/ContentStrategy';
+import MarketingBrainstorm from './components/tabs/MarketingBrainstorm';
+import EditorialCalendar from './components/tabs/EditorialCalendar';
 import CompetitorAnalyzer from './components/tabs/CompetitorAnalyzer';
+import VideoAnalyzer from './components/tabs/VideoAnalyzer';
+import SeoAssistant from './components/tabs/SeoAssistant';
+import ImageGenerator from './components/tabs/ImageGenerator';
 import LandingPage from './components/landing/LandingPage';
 import ProfileOptimizer from './components/tabs/ProfileOptimizer';
 import ApiKeySetup from './components/setup/ApiKeySetup';
@@ -12,20 +16,28 @@ import {
     IdentificationIcon,
     PencilSquareIcon,
     LightBulbIcon,
+    CalendarDaysIcon,
     UsersIcon,
+    VideoCameraIcon,
     MenuIcon,
     XMarkIcon,
     SparklesIcon,
+    MagnifyingGlassIcon,
+    PhotoIcon,
     UserCircleIcon,
-} from './components/icons';
+} from './components/icons/Icons';
 import { AppContext, BrandDna, HistoryState, HistoryItem } from './types';
 
 type Tab =
     | 'dna'
     | 'profile'
     | 'contentStudio'
-    | 'strategy'
-    | 'competitor';
+    | 'brainstorm'
+    | 'calendar'
+    | 'competitor'
+    | 'video'
+    | 'seo'
+    | 'image';
 
 type AppState = 'landing' | 'apiKey' | 'main';
     
@@ -249,9 +261,13 @@ const App: React.FC = () => {
         { type: 'header', label: 'Presença' },
         { type: 'button', id: 'profile', label: 'Otimizador de Perfil', icon: UserCircleIcon, component: <ProfileOptimizer appContext={appContext} history={getHistoryForTab('profile')} />, disabled: !isFoundationSet },
         { type: 'button', id: 'contentStudio', label: 'Estúdio de Conteúdo', icon: PencilSquareIcon, component: <ContentStudio appContext={appContext} history={getHistoryForTab('contentStudio')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'image', label: 'Gerador de Imagens', icon: PhotoIcon, component: <ImageGenerator appContext={appContext} history={getHistoryForTab('image')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'video', label: 'Analisador de Vídeo', icon: VideoCameraIcon, component: <VideoAnalyzer appContext={appContext} history={getHistoryForTab('video')} />, disabled: !isFoundationSet },
 
         { type: 'header', label: 'Estratégia' },
-        { type: 'button', id: 'strategy', label: 'Estratégia de Conteúdo', icon: LightBulbIcon, component: <ContentStrategy appContext={appContext} history={getHistoryForTab('strategy')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'brainstorm', label: 'Brainstorm de Ideias', icon: LightBulbIcon, component: <MarketingBrainstorm appContext={appContext} history={getHistoryForTab('brainstorm')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'calendar', label: 'Calendário Editorial', icon: CalendarDaysIcon, component: <EditorialCalendar appContext={appContext} history={getHistoryForTab('calendar')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'seo', label: 'SEO Pessoal', icon: MagnifyingGlassIcon, component: <SeoAssistant appContext={appContext} history={getHistoryForTab('seo')} />, disabled: !isFoundationSet },
 
         { type: 'header', label: 'Mercado' },
         { type: 'button', id: 'competitor', label: 'Análise de Mercado', icon: UsersIcon, component: <CompetitorAnalyzer appContext={appContext} history={getHistoryForTab('competitor')} />, disabled: !isFoundationSet },

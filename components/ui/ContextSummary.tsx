@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppContext } from '../../types';
-import { ChevronUpIcon, ChevronDownIcon } from '../icons';
+import { ChevronUpIcon, ChevronDownIcon } from '../icons/Icons';
 
 interface ContextSummaryProps {
     context: AppContext;

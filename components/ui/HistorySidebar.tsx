@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { HistoryItem } from '../../types';
-import { TrashIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons';
+import { TrashIcon, ChevronLeftIcon, ChevronRightIcon } from '../icons/Icons';
 
 interface HistorySidebarProps {
     history: HistoryItem[];
