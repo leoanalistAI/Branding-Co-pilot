@@ -3,27 +3,21 @@ import TabButton from './components/ui/TabButton';
 import ContextSummary from './components/ui/ContextSummary';
 import FoundationAndPersonas from './components/tabs/FoundationAndPersonas';
 import ContentStudio from './components/tabs/ContentStudio';
-import MarketingBrainstorm from './components/tabs/MarketingBrainstorm';
 import EditorialCalendar from './components/tabs/EditorialCalendar';
 import CompetitorAnalyzer from './components/tabs/CompetitorAnalyzer';
-import VideoAnalyzer from './components/tabs/VideoAnalyzer';
 import SeoAssistant from './components/tabs/SeoAssistant';
-import ImageGenerator from './components/tabs/ImageGenerator';
 import LandingPage from './components/landing/LandingPage';
 import ProfileOptimizer from './components/tabs/ProfileOptimizer';
 import ApiKeySetup from './components/setup/ApiKeySetup';
 import {
     IdentificationIcon,
     PencilSquareIcon,
-    LightBulbIcon,
     CalendarDaysIcon,
     UsersIcon,
-    VideoCameraIcon,
     MenuIcon,
     XMarkIcon,
     SparklesIcon,
     MagnifyingGlassIcon,
-    PhotoIcon,
     UserCircleIcon,
 } from './components/icons/Icons';
 import { AppContext, BrandDna, HistoryState, HistoryItem } from './types';
@@ -32,12 +26,9 @@ type Tab =
     | 'dna'
     | 'profile'
     | 'contentStudio'
-    | 'brainstorm'
     | 'calendar'
     | 'competitor'
-    | 'video'
-    | 'seo'
-    | 'image';
+    | 'seo';
 
 type AppState = 'landing' | 'apiKey' | 'main';
     
@@ -261,11 +252,8 @@ const App: React.FC = () => {
         { type: 'header', label: 'Presença' },
         { type: 'button', id: 'profile', label: 'Otimizador de Perfil', icon: UserCircleIcon, component: <ProfileOptimizer appContext={appContext} history={getHistoryForTab('profile')} />, disabled: !isFoundationSet },
         { type: 'button', id: 'contentStudio', label: 'Estúdio de Conteúdo', icon: PencilSquareIcon, component: <ContentStudio appContext={appContext} history={getHistoryForTab('contentStudio')} />, disabled: !isFoundationSet },
-        { type: 'button', id: 'image', label: 'Gerador de Imagens', icon: PhotoIcon, component: <ImageGenerator appContext={appContext} history={getHistoryForTab('image')} />, disabled: !isFoundationSet },
-        { type: 'button', id: 'video', label: 'Analisador de Vídeo', icon: VideoCameraIcon, component: <VideoAnalyzer appContext={appContext} history={getHistoryForTab('video')} />, disabled: !isFoundationSet },
 
         { type: 'header', label: 'Estratégia' },
-        { type: 'button', id: 'brainstorm', label: 'Brainstorm de Ideias', icon: LightBulbIcon, component: <MarketingBrainstorm appContext={appContext} history={getHistoryForTab('brainstorm')} />, disabled: !isFoundationSet },
         { type: 'button', id: 'calendar', label: 'Calendário Editorial', icon: CalendarDaysIcon, component: <EditorialCalendar appContext={appContext} history={getHistoryForTab('calendar')} />, disabled: !isFoundationSet },
         { type: 'button', id: 'seo', label: 'SEO Pessoal', icon: MagnifyingGlassIcon, component: <SeoAssistant appContext={appContext} history={getHistoryForTab('seo')} />, disabled: !isFoundationSet },
 
@@ -308,10 +296,9 @@ const App: React.FC = () => {
         <nav className="flex-grow p-4 space-y-1 overflow-y-auto">
             {tabs.map((tab, index) => {
                 if (tab.type === 'header') {
-                    // Add a key to the header element
                     return <h3 key={`header-${index}`} className="px-3 pt-4 pb-1 text-xs font-semibold text-neutral-500 uppercase tracking-wider">{tab.label}</h3>;
                 }
-                const buttonTab = tab as any; // Cast to access button properties
+                const buttonTab = tab as any;
                 return (
                     <TabButton
                         key={buttonTab.id}
