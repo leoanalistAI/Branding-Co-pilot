@@ -24,3 +24,6 @@ export * from './LinkIcon';
 export * from './BriefcaseIcon';
 export * from './AcademicCapIcon';
 export * from './CheckIcon';
+export * from './InstagramIcon';
+export * from './LinkedinIcon';
+export * from './ClipboardDocumentIcon';
