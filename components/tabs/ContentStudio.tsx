@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { generateCopyService, createScriptService, generateCarouselService } from '../../services/geminiService';
 import { AppContext, CopywritingResult, ScriptResult, CarouselResult, Source, HistoryItem } from '../../types';
@@ -8,7 +7,7 @@ import Spinner from '../ui/Spinner';
 import HistorySidebar from '../ui/HistorySidebar';
 import Sources from '../ui/Sources';
 import { downloadAsMarkdown } from '../../utils/fileUtils';
-import { ArrowDownTrayIcon } from '../icons/Icons';
+import { ArrowDownTrayIcon } from '../icons';
 
 interface ContentStudioProps {
     appContext: AppContext;

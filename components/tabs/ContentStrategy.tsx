@@ -6,7 +6,7 @@ import { Card, CardContent } from '../ui/Card';
 import Spinner from '../ui/Spinner';
 import Sources from '../ui/Sources';
 import { downloadAsMarkdown } from '../../utils/fileUtils';
-import { ArrowDownTrayIcon, PlusIcon } from '../icons/Icons';
+import { ArrowDownTrayIcon, PlusIcon } from '../icons';
 import HistorySidebar from '../ui/HistorySidebar';
 
 interface ContentStrategyProps {

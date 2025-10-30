@@ -17,7 +17,7 @@ import {
     XMarkIcon,
     SparklesIcon,
     UserCircleIcon,
-} from './components/icons/Icons';
+} from './components/icons';
 import { AppContext, BrandDna, HistoryState, HistoryItem } from './types';
 
 type Tab =

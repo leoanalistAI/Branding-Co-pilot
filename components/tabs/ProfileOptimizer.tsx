@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { optimizeProfileService } from '../../services/geminiService';
 import { AppContext, OptimizedProfile, HistoryItem } from '../../types';
@@ -7,7 +6,7 @@ import Button from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import Spinner from '../ui/Spinner';
 import HistorySidebar from '../ui/HistorySidebar';
-import { PhotoIcon, ArrowDownTrayIcon } from '../icons/Icons';
+import { PhotoIcon, ArrowDownTrayIcon } from '../icons';
 
 interface ProfileOptimizerProps {
     appContext: AppContext;

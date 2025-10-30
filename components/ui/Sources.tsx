@@ -1,6 +1,6 @@
 import React from 'react';
 import { Source } from '../../types';
-import { LinkIcon } from '../icons/Icons';
+import { LinkIcon } from '../icons';
 
 interface SourcesProps {
     sources: Source[];
