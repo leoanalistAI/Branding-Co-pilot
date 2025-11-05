@@ -7,56 +7,11 @@ import Spinner from '../ui/Spinner';
 import HistorySidebar from '../ui/HistorySidebar';
 import Sources from '../ui/Sources';
 import { downloadAsMarkdown } from '../../utils/fileUtils';
-import { ArrowDownTrayIcon, UsersIcon, BriefcaseIcon, AcademicCapIcon, CheckIcon } from '../icons/Icons';
+import { ArrowDownTrayIcon, UsersIcon } from '../icons/Icons';
 
 interface FoundationAndPersonasProps {
     appContext: AppContext;
 }
-
-type Archetype = 'expert' | 'rising' | 'freelancer';
-
-const archetypes = {
-    expert: {
-        icon: BriefcaseIcon,
-        title: "Especialista Estabelecido",
-        description: "Para quem já tem carreira e quer se posicionar como autoridade.",
-        prefill: {
-            name: "Dr. Ana Oliveira",
-            purpose: "Capacitar líderes de negócios a utilizarem a inteligência artificial de forma ética e estratégica para impulsionar o crescimento.",
-            expertise: "Inteligência Artificial aplicada a negócios, ética em IA, liderança e transformação digital.",
-            audience: "Executivos C-level, diretores de tecnologia e gerentes de inovação em médias e grandes empresas.",
-            transformation: "De uma visão reativa sobre tecnologia para uma liderança proativa que integra a IA no core do negócio, gerando vantagem competitiva e inovação sustentável.",
-            personality: "Profissional e Confiável"
-        }
-    },
-    rising: {
-        icon: AcademicCapIcon,
-        title: "Talento em Ascensão",
-        description: "Para estudantes ou freelancers no início de carreira.",
-        prefill: {
-            name: "Lucas Mendes",
-            purpose: "Ajudar pequenas empresas e ONGs a contarem suas histórias de forma impactante através do design gráfico e storytelling visual.",
-            expertise: "Design de identidade visual (branding), design para mídias sociais, ilustração digital.",
-            audience: "Empreendedores de pequenos negócios, gestores de marketing de ONGs e startups em estágio inicial.",
-            transformation: "Transformar uma comunicação visual genérica em uma marca forte e autêntica que gera conexão, engajamento e reconhecimento.",
-            personality: "Amigável e Acessível"
-        }
-    },
-    freelancer: {
-        icon: CheckIcon,
-        title: "Profissional Autônomo",
-        description: "Para quem já atua de forma independente e quer escalar.",
-        prefill: {
-            name: "Sofia Costa",
-            purpose: "Otimizar a saúde e o bem-estar de profissionais ocupados através de programas de nutrição personalizados e coaching de hábitos.",
-            expertise: "Nutrição funcional, planejamento de dietas, coaching de saúde e bem-estar, culinária saudável.",
-            audience: "Profissionais entre 30 e 50 anos que trabalham em ambientes corporativos e têm pouco tempo para cuidar da alimentação.",
-            transformation: "Sair de um estado de cansaço e baixa energia para uma vida com mais vitalidade, foco e produtividade, através de uma relação mais saudável com a comida.",
-            personality: "Inspirador e Motivacional"
-        }
-    }
-};
-
 
 const FoundationAndPersonas: React.FC<FoundationAndPersonasProps> = ({ appContext }) => {
     const [name, setName] = useState('');
@@ -65,8 +20,6 @@ const FoundationAndPersonas: React.FC<FoundationAndPersonasProps> = ({ appContex
     const [audience, setAudience] = useState('');
     const [transformation, setTransformation] = useState('');
     const [personality, setPersonality] = useState('Profissional e Confiável');
-    
-    const [selectedArchetype, setSelectedArchetype] = useState<Archetype | null>(null);
 
     const [brandDnaResult, setBrandDnaResult] = useState<BrandDna | null>(null);
     const [avatarResult, setAvatarResult] = useState<AudienceAvatar | null>(null);
@@ -84,8 +37,6 @@ const FoundationAndPersonas: React.FC<FoundationAndPersonasProps> = ({ appContex
             const activeItem = appContext.history.dna.find(item => item.id === appContext.activeBrandId);
             if (activeItem) {
                 setAvatarResult(activeItem.result.avatar || null);
-                // When loading from history, we don't have an archetype, but we can show the form
-                setSelectedArchetype('expert'); // default to show the form
             } else {
                  setAvatarResult(null);
             }
@@ -93,20 +44,8 @@ const FoundationAndPersonas: React.FC<FoundationAndPersonasProps> = ({ appContex
             setBrandDnaResult(null);
             setAvatarResult(null);
             setActiveHistoryId(null);
-            setSelectedArchetype(null);
         }
     }, [appContext.brandDna, appContext.activeBrandId, appContext.history.dna]);
-    
-    const handleArchetypeSelect = (archetype: Archetype) => {
-        setSelectedArchetype(archetype);
-        const { prefill } = archetypes[archetype];
-        setName(prefill.name);
-        setPurpose(prefill.purpose);
-        setExpertise(prefill.expertise);
-        setAudience(prefill.audience);
-        setTransformation(prefill.transformation);
-        setPersonality(prefill.personality);
-    };
 
     const handleDnaSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -213,31 +152,13 @@ const FoundationAndPersonas: React.FC<FoundationAndPersonasProps> = ({ appContex
         downloadAsMarkdown(content, `dna-marca-${brandDnaResult.name.replace(/\s+/g, '-').toLowerCase()}`);
     };
 
-    const renderArchetypeSelection = () => (
-        <Card>
-            <CardHeader>
-                <CardTitle>Comece por aqui</CardTitle>
-                <CardDescription>Selecione o arquétipo que melhor descreve seu momento atual para guiar a IA.</CardDescription>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {Object.entries(archetypes).map(([key, { icon: Icon, title, description }]) => (
-                    <button key={key} onClick={() => handleArchetypeSelect(key as Archetype)} className="p-4 bg-neutral-900 hover:bg-neutral-800 rounded-lg text-left transition-colors flex flex-col items-center text-center">
-                        <Icon className="w-8 h-8 mb-3 text-blue-400" />
-                        <h4 className="font-semibold text-neutral-100">{title}</h4>
-                        <p className="text-xs text-neutral-400 mt-1">{description}</p>
-                    </button>
-                ))}
-            </CardContent>
-        </Card>
-    );
-    
     const renderDnaForm = () => {
         const inputClasses = "w-full bg-neutral-900 text-neutral-200 p-2 rounded-lg border border-neutral-700 focus:ring-blue-500/50 focus:border-blue-500 focus:ring-2 transition-colors";
         return (
             <Card>
                 <CardHeader>
                     <CardTitle>Diagnóstico de Clareza</CardTitle>
-                    <CardDescription>Personalize os exemplos abaixo para definir a base da sua marca.</CardDescription>
+                    <CardDescription>Preencha os campos abaixo para definir a base da sua marca.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleDnaSubmit} className="space-y-4">
@@ -253,7 +174,6 @@ const FoundationAndPersonas: React.FC<FoundationAndPersonasProps> = ({ appContex
                             </select>
                         </div>
                         <div className="flex gap-4 !mt-6">
-                            <Button type="button" variant="secondary" onClick={() => setSelectedArchetype(null)}>Voltar</Button>
                             <Button type="submit" isLoading={isLoadingDna} className="w-full">Gerar DNA da Marca</Button>
                         </div>
                     </form>
@@ -272,7 +192,7 @@ const FoundationAndPersonas: React.FC<FoundationAndPersonasProps> = ({ appContex
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                     <div>
-                        {!selectedArchetype ? renderArchetypeSelection() : renderDnaForm()}
+                        {renderDnaForm()}
                     </div>
 
                     <div className="space-y-4">
