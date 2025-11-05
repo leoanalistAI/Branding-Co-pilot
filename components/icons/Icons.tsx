@@ -9,12 +9,6 @@ export const IdentificationIcon: React.FC<IconProps> = (props) => (
   </svg>
 );
 
-export const CubeIcon: React.FC<IconProps> = (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-    </svg>
-);
-
 export const PencilSquareIcon: React.FC<IconProps> = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
     <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -37,12 +31,6 @@ export const UsersIcon: React.FC<IconProps> = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-1.063M15 19.128v-3.86a2.25 2.25 0 0 1 2.25-2.25h.005a2.25 2.25 0 0 1 2.25 2.25v3.86M15 19.128a9.37 9.37 0 0 1-6.912-3.86 2.25 2.25 0 0 1-2.25-2.25h-.005a2.25 2.25 0 0 1-2.25 2.25v3.86m0 0a9.37 9.37 0 0 0 6.912 3.86m-6.912-3.86a2.25 2.25 0 0 0-2.25 2.25c0 1.242.99 2.25 2.25 2.25h.005a2.25 2.25 0 0 0 2.25-2.25v-3.86m-4.5-6.364a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m4.5-3.862a2.25 2.25 0 1 0-4.5 0 2.25 2.25 0 0 0 4.5 0m4.5 3.862a2.25 2.25 0 1 0-4.5 0 2.25 2.25 0 0 0 4.5 0m-4.5 3.862a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m6.912-6.364a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0" />
   </svg>
-);
-
-export const FunnelIcon: React.FC<IconProps> = (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.572a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-    </svg>
 );
 
 export const VideoCameraIcon: React.FC<IconProps> = (props) => (
