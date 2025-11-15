@@ -47,12 +47,21 @@ const cleanJsonString = (jsonString: string): string => {
 };
 
 
-const generateContentWithSchema = async <T>(prompt: string, schema: any, useSearch: boolean = false): Promise<GroundedResponse<T>> => {
+const generateContentWithSchema = async <T>(
+    prompt: string,
+    schema: any,
+    useSearch: boolean = false,
+    temperature?: number
+): Promise<GroundedResponse<T>> => {
     const ai = getAiClient();
     const config: any = {
         responseMimeType: "application/json",
         responseSchema: schema,
     };
+
+    if (temperature !== undefined) {
+        config.temperature = temperature;
+    }
 
     if (useSearch) {
         config.tools = [{ googleSearch: {} }];
@@ -111,21 +120,23 @@ export const generateBrandDnaService = (
     personality: string
 ): Promise<GroundedResponse<BrandDna>> => {
     const prompt = `
-        Gere um DNA de Marca Pessoal para a seguinte pessoa/projeto. Use o Google Search para se inspirar e trazer informações atualizadas.
-        - Nome: ${name}
-        - Missão/Propósito: ${purpose}
-        - Expertise: ${expertise}
-        - Público: ${audience}
-        - Transformação Oferecida: ${transformation}
-        - Personalidade da Comunicação: ${personality}
+        Você é um especialista em branding. Gere um DNA de Marca Pessoal estratégico e detalhado para o seguinte perfil. Use o Google Search para se inspirar e trazer informações de mercado atualizadas.
 
-        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
+        **Perfil Base:**
+        - **Nome:** ${name}
+        - **Missão/Propósito:** ${purpose}
+        - **Expertise:** ${expertise}
+        - **Público:** ${audience}
+        - **Transformação Oferecida:** ${transformation}
+        - **Personalidade da Comunicação:** ${personality}
+
+        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown. Seja específico e fuja de respostas genéricas.
         - "name": (string) O nome da marca/pessoa.
-        - "brandStatement": (string) Uma declaração de marca curta e impactante (1-2 frases).
-        - "mission": (string) A missão da marca, expandindo o propósito inicial (2-3 frases).
-        - "pillars": (string[]) 3 a 5 pilares de conteúdo principais.
-        - "voiceAndPersonality": (string) Descreva a voz e personalidade da marca em detalhes (3-4 frases), baseada na personalidade informada.
-        - "keywords": (string[]) 5 a 8 palavras-chave e termos relevantes para SEO e busca.
+        - "brandStatement": (string) Uma declaração de marca curta, memorável e impactante (1-2 frases).
+        - "mission": (string) A missão da marca, expandindo o propósito inicial com uma visão clara de futuro (2-3 frases).
+        - "pillars": (string[]) 3 a 5 pilares de conteúdo principais que demonstrem a expertise.
+        - "voiceAndPersonality": (string) Descreva a voz e personalidade da marca em detalhes (3-4 frases), incluindo o que fazer e o que não fazer.
+        - "keywords": (string[]) 5 a 8 palavras-chave e termos de busca relevantes e específicos para o nicho.
     `;
     return generateContentWithSchema<BrandDna>(prompt, {
         type: Type.OBJECT,
@@ -138,22 +149,23 @@ export const generateBrandDnaService = (
             keywords: { type: Type.ARRAY, items: { type: Type.STRING } },
         },
         required: ['name', 'brandStatement', 'mission', 'pillars', 'voiceAndPersonality', 'keywords']
-    }, true);
+    }, true, 0.7);
 };
 
 export const generateAudienceAvatarService = (brandDna: BrandDna): Promise<GroundedResponse<AudienceAvatar>> => {
     const prompt = `
-        Com base no seguinte DNA de Marca, crie um "Avatar da Audiência" detalhado e específico. Este avatar representa o cliente/seguidor ideal. Use o Google Search para pesquisas sobre o público.
-        DNA da Marca:
+        Você é um pesquisador de mercado e psicólogo. Com base no DNA de Marca abaixo, crie um "Avatar da Audiência" profundo, detalhado e realista. Este avatar representa o cliente/seguidor ideal em um nível psicográfico. Use o Google Search para pesquisas de público.
+
+        **DNA da Marca:**
         ${JSON.stringify(brandDna, null, 2)}
 
-        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
-        - "name": (string) Um nome fictício para o avatar.
-        - "description": (string) Uma descrição detalhada do avatar. CRÍTICO: Inclua uma IDADE ESPECÍFICA (ex: 28 anos) e uma PROFISSÃO ou ÁREA DE ESTUDO ESPECÍFICA (ex: 'Desenvolvedor de Software júnior' ou 'Estudante de Marketing Digital').
-        - "dreamsAndAspirations": (string[]) 3-4 sonhos e aspirações.
-        - "fearsAndFrustrations": (string[]) 3-4 medos e frustrações.
-        - "dailyThoughts": (string[]) 3-4 pensamentos que o avatar tem diariamente relacionados ao nicho.
-        - "secretWishes": (string[]) 2-3 desejos secretos ou inconfessáveis.
+        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown. Evite descrições superficiais.
+        - "name": (string) Um nome fictício e realista para o avatar.
+        - "description": (string) Uma descrição detalhada do avatar. CRÍTICO: Inclua uma IDADE ESPECÍFICA (ex: 28 anos) e uma PROFISSÃO ou ÁREA DE ESTUDO ESPECÍFICA e realista (ex: 'Desenvolvedor de Software júnior em uma startup de fintech' ou 'Estudante de último ano de Marketing Digital focado em SEO').
+        - "dreamsAndAspirations": (string[]) 3-4 sonhos e aspirações profundas, ligadas à transformação que a marca oferece.
+        - "fearsAndFrustrations": (string[]) 3-4 medos e frustrações específicas que o avatar enfrenta e que a marca pode resolver.
+        - "dailyThoughts": (string[]) 3-4 pensamentos recorrentes que o avatar tem diariamente relacionados ao seu problema ou nicho.
+        - "secretWishes": (string[]) 2-3 desejos secretos ou inconfessáveis que o avatar hesitaria em admitir publicamente.
     `;
     return generateContentWithSchema<AudienceAvatar>(prompt, {
         type: Type.OBJECT,
@@ -166,7 +178,7 @@ export const generateAudienceAvatarService = (brandDna: BrandDna): Promise<Groun
             secretWishes: { type: Type.ARRAY, items: { type: Type.STRING } },
         },
         required: ['name', 'description', 'dreamsAndAspirations', 'fearsAndFrustrations', 'dailyThoughts', 'secretWishes']
-    }, true);
+    }, true, 0.8);
 };
 
 export const optimizeProfileService = async (
@@ -179,15 +191,16 @@ export const optimizeProfileService = async (
     const ai = getAiClient();
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
-        Analise a imagem do perfil e a biografia para a plataforma ${platform}.
+        Você é um especialista em otimização de perfis para redes sociais. Analise a imagem de perfil e a biografia para a plataforma ${platform} com base no contexto da marca.
         ${contextPrompt}
-        Biografia Atual: "${currentBio}"
+        **Biografia Atual:** "${currentBio}"
 
-        Com base em tudo, forneça:
-        1. Uma nova biografia otimizada, focada em clareza, autoridade e chamada para ação.
-        2. Sugestões de melhoria para a foto de perfil, banner/capa, título/headline e otimizações gerais.
+        **Sua Tarefa:**
+        1.  **Reescrever a Biografia:** Crie uma nova biografia otimizada, focada em clareza, autoridade e com uma chamada para ação (CTA) eficaz.
+        2.  **Analisar a Imagem:** Forneça sugestões de melhoria para a foto de perfil. A análise deve ser crítica e construtiva.
+        3.  **Sugerir Otimizações:** Dê recomendações para outros elementos importantes do perfil, como banner/capa e título/headline.
 
-        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
+        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown. As sugestões devem ser acionáveis.
     `;
 
     const imagePart = {
@@ -205,14 +218,14 @@ export const optimizeProfileService = async (
             responseSchema: {
                 type: Type.OBJECT,
                 properties: {
-                    bio: { type: Type.STRING },
+                    bio: { type: Type.STRING, description: "A nova biografia otimizada." },
                     suggestions: {
                         type: Type.OBJECT,
                         properties: {
-                            profilePicture: { type: Type.ARRAY, items: { type: Type.STRING } },
-                            banner: { type: Type.ARRAY, items: { type: Type.STRING } },
-                            headline: { type: Type.ARRAY, items: { type: Type.STRING } },
-                            general: { type: Type.ARRAY, items: { type: Type.STRING } },
+                            profilePicture: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Sugestões para a foto de perfil." },
+                            banner: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Sugestões para a imagem de capa/banner." },
+                            headline: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Sugestões para o título/headline." },
+                            general: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Outras otimizações gerais." },
                         },
                         required: ['profilePicture', 'banner', 'headline', 'general']
                     },
@@ -233,15 +246,17 @@ export const developProductService = (
 ): Promise<GroundedResponse<ProductIdea>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
-        Desenvolva a seguinte ideia de produto/serviço em um conceito claro. Use o Google Search para validar a ideia e buscar referências.
-        Ideia: "${productIdea}"
+        Você é um especialista em desenvolvimento de produtos digitais. Desenvolva a seguinte ideia de produto/serviço em um conceito claro, inovador e memorável. Use o Google Search para validar a ideia e buscar referências de mercado.
+        Ideia Central: "${productIdea}"
         ${contextPrompt}
 
+        Seja criativo e evite respostas genéricas. Pense em um ângulo único para o produto.
+
         O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
-        - "name": (string) Um nome atraente para o produto/serviço.
-        - "description": (string) Uma descrição detalhada.
-        - "targetAudience": (string) Descrição do público-alvo ideal.
-        - "keyFeatures": (string[]) 3-5 principais características ou módulos.
+        - "name": (string) Um nome extremamente atraente e único para o produto/serviço.
+        - "description": (string) Uma descrição detalhada e persuasiva que vende o valor do produto.
+        - "targetAudience": (string) Descrição do público-alvo ideal, com detalhes demográficos e psicográficos.
+        - "keyFeatures": (string[]) 3 a 5 principais características ou módulos, descritos de forma que destaquem os benefícios.
     `;
     return generateContentWithSchema<ProductIdea>(prompt, {
         type: Type.OBJECT,
@@ -252,7 +267,7 @@ export const developProductService = (
             keyFeatures: { type: Type.ARRAY, items: { type: Type.STRING } },
         },
         required: ['name', 'description', 'targetAudience', 'keyFeatures']
-    }, true);
+    }, true, 0.9);
 };
 
 export const brainstormMarketingIdeasService = (
@@ -261,15 +276,16 @@ export const brainstormMarketingIdeasService = (
 ): Promise<GroundedResponse<BrainstormIdea[]>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
-        Gere 5 ideias de marketing criativas e acionáveis sobre o tópico: "${topic}".
-        Considere o contexto da marca para alinhar as ideias. Use o Google Search para se inspirar.
+        Você é um estrategista de marketing digital. Gere 5 ideias de marketing disruptivas e altamente criativas sobre o tópico: "${topic}".
+        As ideias devem ser acionáveis e originais, evitando clichês de marketing. Pense fora da caixa.
+        Considere o contexto da marca para alinhar as ideias, mas não se limite a ele. Use o Google Search para se inspirar em campanhas de sucesso.
         ${contextPrompt}
         
         O resultado deve ser um JSON com uma lista de 5 objetos. CADA OBJETO DEVE CONTER:
-        - "idea": (string) Um título curto e criativo para a ideia. NÃO DEIXE VAZIO.
-        - "description": (string) Uma descrição detalhada de como implementar a ideia. NÃO DEIXE VAZIO.
+        - "idea": (string) Um título curto, impactante e memorável para a ideia. NÃO DEIXE VAZIO.
+        - "description": (string) Uma descrição detalhada de como implementar a ideia, explicando o elemento surpresa ou inovador. NÃO DEIXE VAZIO.
         
-        NÃO adicione markdown. Garanta que a resposta seja um JSON válido.
+        NÃO adicione markdown. Garanta que a resposta seja um JSON válido e que as ideias sejam distintas umas das outras.
     `;
     return generateContentWithSchema<BrainstormIdea[]>(prompt, {
         type: Type.ARRAY,
@@ -281,7 +297,7 @@ export const brainstormMarketingIdeasService = (
             },
             required: ['idea', 'description']
         }
-    }, true);
+    }, true, 0.9);
 };
 
 export const createEditorialCalendarService = (
@@ -341,16 +357,16 @@ export const analyzeCompetitorService = (
 ): Promise<GroundedResponse<CompetitorAnalysis>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
-        Analise o perfil/site no link a seguir: ${competitorUrl}.
-        Use o Google Search para coletar informações sobre este perfil e seu nicho.
-        Se um contexto de marca for fornecido, use-o para comparar e encontrar oportunidades.
+        Você é um analista de mercado sênior. Faça uma análise competitiva profunda e estratégica do perfil/site: ${competitorUrl}.
+        Use o Google Search para coletar informações detalhadas sobre este perfil, seu nicho e sua reputação online.
+        Se um contexto de marca for fornecido, use-o para identificar vantagens competitivas e oportunidades inexploradas.
         ${contextPrompt}
         
         O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
-        - "competitorName": (string) O nome do influenciador/marca analisada.
-        - "strengths": (string[]) 3-4 pontos fortes.
-        - "weaknesses": (string[]) 3-4 pontos fracos.
-        - "opportunities": (string[]) 3-4 oportunidades para a *minha* marca com base na análise.
+        - "competitorName": (string) O nome exato do influenciador/marca analisada.
+        - "strengths": (string[]) 3-4 pontos fortes específicos e bem fundamentados.
+        - "weaknesses": (string[]) 3-4 pontos fracos ou lacunas de mercado específicas.
+        - "opportunities": (string[]) 3-4 oportunidades estratégicas e acionáveis para a *minha* marca, baseadas nas fraquezas do concorrente.
     `;
     return generateContentWithSchema<CompetitorAnalysis>(prompt, {
         type: Type.OBJECT,
@@ -361,16 +377,16 @@ export const analyzeCompetitorService = (
             opportunities: { type: Type.ARRAY, items: { type: Type.STRING } },
         },
         required: ['competitorName', 'strengths', 'weaknesses', 'opportunities']
-    }, true);
+    }, true, 0.8);
 };
 
 export const findPeersService = (brandDna: BrandDna): Promise<GroundedResponse<FoundCompetitor[]>> => {
     const prompt = `
-        Com base no DNA de Marca abaixo, encontre 3-5 peers, influenciadores ou concorrentes diretos relevantes.
-        Use o Google Search para a pesquisa.
+        Você é um especialista em branding e networking. Com base no DNA de Marca abaixo, encontre 3-5 peers, influenciadores ou concorrentes diretos que sejam altamente relevantes e, talvez, não óbvios.
+        Use o Google Search para uma pesquisa aprofundada. Procure por players emergentes ou de nicho.
         DNA da Marca: ${JSON.stringify(brandDna, null, 2)}
 
-        O resultado deve ser um JSON com uma lista de objetos. Cada objeto deve conter o nome do influenciador/peer e a URL principal do seu perfil (LinkedIn, Instagram, Site, etc.). NÃO adicione markdown.
+        O resultado deve ser um JSON com uma lista de objetos. Cada objeto deve conter o nome do influenciador/peer e a URL principal do seu perfil (LinkedIn, Instagram, Site, etc.). NÃO adicione markdown. Para cada resultado, garanta que seja único e relevante.
     `;
     return generateContentWithSchema<FoundCompetitor[]>(prompt, {
         type: Type.ARRAY,
@@ -382,7 +398,7 @@ export const findPeersService = (brandDna: BrandDna): Promise<GroundedResponse<F
             },
             required: ['name', 'url']
         }
-    }, true);
+    }, true, 0.9);
 };
 
 export const generateFunnelStageSuggestionsService = (
@@ -392,14 +408,14 @@ export const generateFunnelStageSuggestionsService = (
 ): Promise<GroundedResponse<FunnelStageSuggestions>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
-        Para a etapa do funil de marketing "${stageTitle}" (${stageDescription}), gere sugestões.
-        Use o Google Search para pesquisar táticas e ferramentas relevantes.
+        Você é um especialista em funis de marketing. Para a etapa do funil "${stageTitle}" (${stageDescription}), gere sugestões criativas e eficazes.
+        Use o Google Search para pesquisar táticas e ferramentas inovadoras e relevantes para esta etapa específica.
         ${contextPrompt}
         
-        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
-        - "tactics": (string[]) 3-4 táticas de marketing.
-        - "contentIdeas": (string[]) 3-4 ideias de conteúdo.
-        - "tools": (string[]) 2-3 ferramentas úteis.
+        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown. Evite sugestões genéricas.
+        - "tactics": (string[]) 3-4 táticas de marketing específicas e detalhadas.
+        - "contentIdeas": (string[]) 3-4 ideias de conteúdo originais e alinhadas com a etapa do funil.
+        - "tools": (string[]) 2-3 ferramentas úteis e talvez menos conhecidas para executar as táticas.
     `;
     return generateContentWithSchema<FunnelStageSuggestions>(prompt, {
         type: Type.OBJECT,
@@ -409,7 +425,7 @@ export const generateFunnelStageSuggestionsService = (
             tools: { type: Type.ARRAY, items: { type: Type.STRING } },
         },
         required: ['tactics', 'contentIdeas', 'tools']
-    }, true);
+    }, true, 0.9);
 };
 
 export const analyzeVideoService = async (
@@ -471,15 +487,15 @@ export const generateCopyService = (
 ): Promise<GroundedResponse<CopywritingResult>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
-        Crie uma copy para "${type}" sobre o tópico/produto "${topic}".
-        O tom de voz deve ser ${toneOfVoice}.
-        Use o Google Search para referências de copywriting eficaz.
+        Você é um copywriter sênior. Crie uma copy persuasiva e de alta conversão para "${type}" sobre o tópico/produto "${topic}".
+        O tom de voz deve ser estritamente ${toneOfVoice}.
+        Use o Google Search para pesquisar frameworks de copywriting (como AIDA, PAS) e aplicá-los.
         ${contextPrompt}
         
         O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
-        - "headline": (string) Um título/headline impactante.
-        - "body": (string) O corpo do texto, bem estruturado.
-        - "cta": (string) Uma chamada para ação (call to action) clara.
+        - "headline": (string) Um título/headline magnético e que gere curiosidade.
+        - "body": (string) O corpo do texto, bem estruturado com parágrafos curtos e storytelling.
+        - "cta": (string) Uma chamada para ação (call to action) clara, urgente e irresistível.
     `;
     return generateContentWithSchema<CopywritingResult>(prompt, {
         type: Type.OBJECT,
@@ -489,7 +505,7 @@ export const generateCopyService = (
             cta: { type: Type.STRING },
         },
         required: ['headline', 'body', 'cta']
-    }, true);
+    }, true, 0.8);
 };
 
 export const createScriptService = (
@@ -501,17 +517,17 @@ export const createScriptService = (
 ): Promise<GroundedResponse<ScriptResult>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
-        Crie um roteiro para um vídeo do tipo "${videoType}".
-        Tópico: ${topic}
-        ${title ? `Título Sugerido: ${title}` : ''}
-        ${hook ? `Gancho Sugerido: ${hook}` : ''}
+        Você é um roteirista profissional para conteúdo digital. Crie um roteiro de vídeo para um(a) "${videoType}".
+        **Tópico Central:** ${topic}
+        ${title ? `**Título Sugerido:** ${title}` : ''}
+        ${hook ? `**Gancho (Hook) Sugerido:** ${hook}` : ''}
         ${contextPrompt}
         
-        O resultado deve ser um JSON. O roteiro deve ser dividido em cenas com descrição visual e diálogo.
-        - "title": (string) Um título otimizado para a plataforma.
-        - "hook": (string) O gancho inicial (primeiros 3 segundos).
-        - "script": (array) Um array de objetos, onde cada objeto tem "scene", "visual" e "dialogue".
-        - "cta": (string) A chamada para ação no final.
+        O resultado deve ser um JSON. O roteiro deve ser detalhado, dividido em cenas com descrições visuais e diálogos/narração.
+        - "title": (string) Um título otimizado para a plataforma e para cliques (Click-Through Rate).
+        - "hook": (string) O gancho inicial (primeiros 3 segundos), projetado para máxima retenção.
+        - "script": (array) Um array de objetos, onde cada objeto tem "scene" (nº da cena), "visual" (descrição visual detalhada) e "dialogue" (diálogo ou narração).
+        - "cta": (string) A chamada para ação no final, que seja natural e eficaz.
     `;
     return generateContentWithSchema<ScriptResult>(prompt, {
         type: Type.OBJECT,
@@ -533,7 +549,7 @@ export const createScriptService = (
             cta: { type: Type.STRING },
         },
         required: ['title', 'hook', 'script', 'cta']
-    }, true);
+    }, true, 0.8);
 };
 
 export const generateCarouselService = (
@@ -544,19 +560,19 @@ export const generateCarouselService = (
 ): Promise<GroundedResponse<CarouselResult>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
-        Crie um post de carrossel para ${platform} com ${numSlides} slides sobre o tópico: "${topic}".
-        O carrossel deve ter uma narrativa coesa, começando com um gancho forte no primeiro slide e terminando com uma chamada para ação clara.
-        Para cada slide, forneça um título, o conteúdo do texto e um prompt detalhado para uma imagem de IA que ilustre o conteúdo.
+        Você é um designer de conteúdo para mídias sociais. Crie um post de carrossel de ${numSlides} slides para ${platform} sobre o tópico: "${topic}".
+        O carrossel deve contar uma história coesa, com um gancho forte no primeiro slide, desenvolvimento nos slides intermediários e uma CTA clara no final.
+        Para cada slide, forneça um título, o conteúdo do texto e um prompt de imagem detalhado para IA.
         ${contextPrompt}
 
         O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
-        - "mainTitle": (string) Um título geral para o post de carrossel.
-        - "slides": (array) Um array de ${numSlides} objetos, onde cada objeto representa um slide.
+        - "mainTitle": (string) Um título geral e impactante para o post.
+        - "slides": (array) Um array de ${numSlides} objetos. Cada objeto deve ser um slide.
             - "slideNumber": (number) O número do slide.
-            - "title": (string) Um título curto e impactante para o slide.
-            - "content": (string) O texto principal do slide.
-            - "imagePrompt": (string) Um prompt para gerar uma imagem que acompanha o texto do slide.
-        - "cta": (string) Uma chamada para ação para o último slide.
+            - "title": (string) Um título curto e que gere curiosidade para o slide.
+            - "content": (string) O texto principal do slide, conciso e direto.
+            - "imagePrompt": (string) Um prompt detalhado para gerar uma imagem visualmente atraente que ilustre o conteúdo do slide.
+        - "cta": (string) Uma chamada para ação engajadora para o último slide.
     `;
 
     return generateContentWithSchema<CarouselResult>(prompt, {
@@ -579,7 +595,7 @@ export const generateCarouselService = (
             cta: { type: Type.STRING },
         },
         required: ['mainTitle', 'slides', 'cta']
-    }, true);
+    }, true, 0.7);
 };
 
 
@@ -589,15 +605,15 @@ export const generateSeoAnalysisService = (
 ): Promise<GroundedResponse<SeoAnalysisResult>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
-        Faça uma análise de SEO completa para o tópico: "${topic}".
-        Use o Google Search para encontrar palavras-chave, perguntas relacionadas e analisar a estrutura dos conteúdos que rankeiam bem.
+        Você é um especialista em SEO. Faça uma análise de SEO aprofundada e estratégica para o tópico: "${topic}".
+        Use o Google Search para encontrar palavras-chave (primárias e secundárias), perguntas frequentes (People Also Ask) e para analisar a estrutura dos conteúdos de melhor ranking.
         ${contextPrompt}
         
-        O resultado deve ser um JSON com a seguinte estrutura.
-        - "primaryKeywords": (string[]) 3-5 palavras-chave primárias.
-        - "secondaryKeywords": (string[]) 5-8 palavras-chave secundárias ou de cauda longa.
-        - "commonQuestions": (string[]) 4-6 perguntas comuns que as pessoas fazem (People Also Ask).
-        - "suggestedStructure": (object) Um objeto com "title", "introduction", "sections" (array de strings) e "conclusion".
+        O resultado deve ser um JSON com a seguinte estrutura. Seja detalhado e estratégico nas sugestões.
+        - "primaryKeywords": (string[]) 3-5 palavras-chave primárias de alta intenção de busca.
+        - "secondaryKeywords": (string[]) 5-8 palavras-chave secundárias ou de cauda longa para suportar o conteúdo principal.
+        - "commonQuestions": (string[]) 4-6 perguntas comuns e específicas que as pessoas fazem sobre o tópico.
+        - "suggestedStructure": (object) Um objeto com "title" (um título otimizado para SEO), "introduction" (uma introdução que prenda a atenção e use a palavra-chave principal), "sections" (um array de strings para os subtópicos H2/H3) e "conclusion" (uma conclusão com CTA).
     `;
     return generateContentWithSchema<SeoAnalysisResult>(prompt, {
         type: Type.OBJECT,
@@ -617,7 +633,7 @@ export const generateSeoAnalysisService = (
             },
         },
         required: ['primaryKeywords', 'secondaryKeywords', 'commonQuestions', 'suggestedStructure']
-    }, true);
+    }, true, 0.7);
 };
 
 export const generateImageService = async (prompt: string, aspectRatio: string): Promise<ImageResult> => {
