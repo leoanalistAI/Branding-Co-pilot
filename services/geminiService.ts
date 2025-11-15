@@ -240,12 +240,23 @@ export const optimizeProfileService = async (
 };
 
 
-export const developProductService = (
-    productIdea: string,
+export const developBrandingConceptService = (
+    conceptIdea: string,
     appContext: AppContext
-): Promise<GroundedResponse<ProductIdea>> => {
+): Promise<GroundedResponse<BrandingConcept>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
+        Você é um estrategista de marca pessoal. Desenvolva a seguinte ideia em um conceito de branding claro, inovador e que gere autoridade. Use o Google Search para buscar referências.
+        Ideia Central: "${conceptIdea}"
+        ${contextPrompt}
+
+        O objetivo não é vender, mas construir autoridade e engajamento. Pense em conceitos como frameworks, metodologias, séries de conteúdo, workshops, etc.
+
+        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
+        - "name": (string) Um nome atraente e memorável para o conceito (ex: "O Framework da Produtividade Consciente").
+        - "description": (string) Uma descrição detalhada que posiciona o conceito como uma solução valiosa para a audiência.
+        - "audience": (string) Descrição do público ideal para este conceito.
+        - "keyComponents": (string[]) 3 a 5 componentes ou pilares principais do conceito, descritos de forma clara.
         Você é um especialista em desenvolvimento de produtos digitais. Desenvolva a seguinte ideia de produto/serviço em um conceito claro, inovador e memorável. Use o Google Search para validar a ideia e buscar referências de mercado.
         Ideia Central: "${productIdea}"
         ${contextPrompt}
@@ -258,14 +269,15 @@ export const developProductService = (
         - "targetAudience": (string) Descrição do público-alvo ideal, com detalhes demográficos e psicográficos.
         - "keyFeatures": (string[]) 3 a 5 principais características ou módulos, descritos de forma que destaquem os benefícios.
     `;
-    return generateContentWithSchema<ProductIdea>(prompt, {
+    return generateContentWithSchema<BrandingConcept>(prompt, {
         type: Type.OBJECT,
         properties: {
             name: { type: Type.STRING },
             description: { type: Type.STRING },
-            targetAudience: { type: Type.STRING },
-            keyFeatures: { type: Type.ARRAY, items: { type: Type.STRING } },
+            audience: { type: Type.STRING },
+            keyComponents: { type: Type.ARRAY, items: { type: Type.STRING } },
         },
+        required: ['name', 'description', 'audience', 'keyComponents']
         required: ['name', 'description', 'targetAudience', 'keyFeatures']
     }, true, 0.9);
 };
@@ -487,6 +499,16 @@ export const generateCopyService = (
 ): Promise<GroundedResponse<CopywritingResult>> => {
     const contextPrompt = getContextPrompt(appContext);
     const prompt = `
+        Você é um especialista em conteúdo de marca pessoal. Crie uma copy autêntica e de alto engajamento para "${type}" sobre o tópico "${topic}".
+        O tom de voz deve ser estritamente ${toneOfVoice}.
+        O objetivo é construir autoridade e iniciar conversas, não vender.
+        Use o Google Search para pesquisar frameworks de copywriting focados em engajamento.
+        ${contextPrompt}
+        
+        O resultado deve ser um JSON com a seguinte estrutura. NÃO adicione markdown.
+        - "headline": (string) Um título/headline que gere curiosidade e convide à leitura.
+        - "body": (string) O corpo do texto, que aporte valor, conte uma história e construa autoridade.
+        - "cta": (string) Uma chamada para ação focada em engajamento (ex: "Qual a sua opinião sobre isso?", "Compartilhe sua experiência nos comentários.").
         Você é um copywriter sênior. Crie uma copy persuasiva e de alta conversão para "${type}" sobre o tópico/produto "${topic}".
         O tom de voz deve ser estritamente ${toneOfVoice}.
         Use o Google Search para pesquisar frameworks de copywriting (como AIDA, PAS) e aplicá-los.
@@ -527,6 +549,7 @@ export const createScriptService = (
         - "title": (string) Um título otimizado para a plataforma e para cliques (Click-Through Rate).
         - "hook": (string) O gancho inicial (primeiros 3 segundos), projetado para máxima retenção.
         - "script": (array) Um array de objetos, onde cada objeto tem "scene" (nº da cena), "visual" (descrição visual detalhada) e "dialogue" (diálogo ou narração).
+        - "cta": (string) Uma chamada para ação focada em engajamento, como fazer uma pergunta ou pedir para compartilhar experiências.
         - "cta": (string) A chamada para ação no final, que seja natural e eficaz.
     `;
     return generateContentWithSchema<ScriptResult>(prompt, {
@@ -572,6 +595,7 @@ export const generateCarouselService = (
             - "title": (string) Um título curto e que gere curiosidade para o slide.
             - "content": (string) O texto principal do slide, conciso e direto.
             - "imagePrompt": (string) Um prompt detalhado para gerar uma imagem visualmente atraente que ilustre o conteúdo do slide.
+        - "cta": (string) Uma chamada para ação focada em engajamento para o último slide (ex: "Deixe sua opinião nos comentários", "Compartilhe com alguém que precisa ver isso").
         - "cta": (string) Uma chamada para ação engajadora para o último slide.
     `;
 
@@ -613,6 +637,7 @@ export const generateSeoAnalysisService = (
         - "primaryKeywords": (string[]) 3-5 palavras-chave primárias de alta intenção de busca.
         - "secondaryKeywords": (string[]) 5-8 palavras-chave secundárias ou de cauda longa para suportar o conteúdo principal.
         - "commonQuestions": (string[]) 4-6 perguntas comuns e específicas que as pessoas fazem sobre o tópico.
+        - "suggestedStructure": (object) Um objeto com "title" (um título otimizado para SEO), "introduction" (uma introdução que prenda a atenção e use a palavra-chave principal), "sections" (um array de strings para os subtópicos H2/H3) e "conclusion" (uma conclusão com uma CTA de engajamento, como uma pergunta).
         - "suggestedStructure": (object) Um objeto com "title" (um título otimizado para SEO), "introduction" (uma introdução que prenda a atenção e use a palavra-chave principal), "sections" (um array de strings para os subtópicos H2/H3) e "conclusion" (uma conclusão com CTA).
     `;
     return generateContentWithSchema<SeoAnalysisResult>(prompt, {

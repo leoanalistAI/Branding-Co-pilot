@@ -34,7 +34,7 @@ const ContentStudio: React.FC<ContentStudioProps> = ({ appContext, history }) =>
     // Sub-types
     const [videoType, setVideoType] = useState('Vídeo Curto (Reels/Shorts)');
     const [postType, setPostType] = useState('Blog');
-    const [copyType, setCopySubtype] = useState('Anúncio');
+    const [copyType, setCopySubtype] = useState('Post de Divulgação');
     const [carouselPlatform, setCarouselPlatform] = useState('Instagram');
     
     // Common fields
@@ -249,14 +249,14 @@ const ContentStudio: React.FC<ContentStudioProps> = ({ appContext, history }) =>
                 return (
                     <>
                         <div>
-                            <label className="block text-sm font-medium text-neutral-300 mb-2">Finalidade</label>
+                            <label className="block text-sm font-medium text-neutral-300 mb-2">Tipo de Copy</label>
                             <div className="flex flex-wrap gap-2">
-                                <RadioPill label="Anúncio" value="Anúncio" checked={copyType === 'Anúncio'} onChange={setCopySubtype} />
-                                <RadioPill label="Email de Vendas" value="Email de Vendas" checked={copyType === 'Email de Vendas'} onChange={setCopySubtype} />
+                                <RadioPill label="Post de Divulgação" value="Post de Divulgação" checked={copyType === 'Post de Divulgação'} onChange={setCopySubtype} />
+                                <RadioPill label="Newsletter" value="Newsletter" checked={copyType === 'Newsletter'} onChange={setCopySubtype} />
                             </div>
                         </div>
                         <div>
-                            <label htmlFor="topic" className="block text-sm font-medium text-neutral-300 mb-1">Produto ou Objetivo</label>
+                            <label htmlFor="topic" className="block text-sm font-medium text-neutral-300 mb-1">Tópico ou Mensagem Principal</label>
                             <input id="topic" type="text" value={topic} onChange={(e) => setTopic(e.target.value)} className={inputClasses} required />
                         </div>
                         <div>
@@ -359,7 +359,7 @@ const ContentStudio: React.FC<ContentStudioProps> = ({ appContext, history }) =>
             <div className="flex-1 p-6 lg:p-8 h-full overflow-y-auto">
                 <header className="mb-8">
                     <h2 className="text-2xl md:text-3xl font-bold text-neutral-100">Estúdio de Conteúdo</h2>
-                    <p className="text-neutral-400 mt-1">Crie qualquer tipo de conteúdo de marketing em um só lugar.</p>
+                    <p className="text-neutral-400 mt-1">Crie diversos formatos de conteúdo para fortalecer sua marca pessoal.</p>
                 </header>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <Card>
