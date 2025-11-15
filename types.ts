@@ -73,20 +73,6 @@ export interface FoundCompetitor {
     url: string;
 }
 
-export interface FunnelStage {
-    id: string;
-    title: string;
-    description: string;
-    icon: 'EyeIcon' | 'CursorArrowRaysIcon' | 'ShoppingCartIcon' | 'TrophyIcon';
-    suggestions?: FunnelStageSuggestions;
-    sources?: Source[];
-}
-
-export interface FunnelStageSuggestions {
-    tactics: string[];
-    contentIdeas: string[];
-    tools: string[];
-}
 
 export interface VideoAnalysisResult {
     insights: string[];

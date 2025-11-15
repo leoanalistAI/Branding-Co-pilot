@@ -15,8 +15,8 @@ interface CompetitorAnalyzerProps {
     history: HistoryItem[];
 }
 
-const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, history }) => {
-    const [competitorUrl, setCompetitorUrl] = useState('');
+const InfluenceAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, history }) => {
+    const [profileUrl, setProfileUrl] = useState('');
     const [useGlobalContext, setUseGlobalContext] = useState(true);
     
     const [result, setResult] = useState<CompetitorAnalysis | null>(null);
@@ -52,12 +52,12 @@ const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, his
             const { data: analysisResult, sources: newSources } = await analyzeCompetitorService(urlToAnalyze, contextForApi);
             setResult(analysisResult);
             setSources(newSources);
-            appContext.addToHistory('competitor', {
+            appContext.addToHistory('influence', {
                 id: Date.now().toString(),
                 timestamp: new Date().toISOString(),
                 type: 'Análise de Influência',
                 summary: analysisResult.competitorName,
-                inputs: { competitorUrl: urlToAnalyze, useGlobalContext },
+                inputs: { profileUrl: urlToAnalyze, useGlobalContext },
                 result: { data: analysisResult, sources: newSources },
             });
         } catch (err) {
@@ -70,7 +70,7 @@ const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, his
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        runAnalysis(competitorUrl);
+        runAnalysis(profileUrl);
     };
     
     const handleFindPeers = async () => {
@@ -93,14 +93,14 @@ const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, his
         }
     };
 
-    const handleAnalyzeFoundCompetitor = (url: string) => {
-        setCompetitorUrl(url); 
+    const handleAnalyzeFoundPeer = (url: string) => {
+        setProfileUrl(url);
         runAnalysis(url);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     
     const handleHistorySelect = (item: any) => {
-        setCompetitorUrl(item.inputs.competitorUrl);
+        setProfileUrl(item.inputs.profileUrl);
         setUseGlobalContext(item.inputs.useGlobalContext ?? true);
         setResult(item.result.data);
         setSources(item.result.sources || []);
@@ -129,14 +129,14 @@ const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, his
                         <form onSubmit={handleSubmit}>
                             <div className="flex flex-col sm:flex-row gap-4 sm:items-end">
                                 <div className="flex-grow">
-                                    <label htmlFor="competitorUrl" className="block text-sm font-medium text-neutral-300 mb-1">
+                                    <label htmlFor="profileUrl" className="block text-sm font-medium text-neutral-300 mb-1">
                                         URL do Perfil (LinkedIn, Instagram, Site)
                                     </label>
                                     <input
-                                        id="competitorUrl"
+                                        id="profileUrl"
                                         type="url"
-                                        value={competitorUrl}
-                                        onChange={(e) => setCompetitorUrl(e.target.value)}
+                                        value={profileUrl}
+                                        onChange={(e) => setProfileUrl(e.target.value)}
                                         className="w-full bg-neutral-900 text-neutral-200 p-2 rounded-lg border border-neutral-700 focus:ring-blue-500/50 focus:border-blue-500 focus:ring-2 transition-colors"
                                         placeholder="https://www.linkedin.com/in/..."
                                         required
@@ -148,13 +148,13 @@ const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, his
                             </div>
                             <div className="flex items-center mt-4">
                                 <input
-                                    id="useGlobalContextCompetitor"
+                                    id="useGlobalContextInfluence"
                                     type="checkbox"
                                     checked={useGlobalContext}
                                     onChange={(e) => setUseGlobalContext(e.target.checked)}
                                     className="h-4 w-4 rounded border-neutral-600 bg-neutral-900 text-blue-600 focus:ring-blue-600 focus:ring-offset-black"
                                 />
-                                <label htmlFor="useGlobalContextCompetitor" className="ml-2 block text-sm text-neutral-300">
+                                <label htmlFor="useGlobalContextInfluence" className="ml-2 block text-sm text-neutral-300">
                                     Usar Contexto Global da Marca para Comparação
                                 </label>
                             </div>
@@ -185,13 +185,13 @@ const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, his
                             <Card>
                                 <CardContent className="pt-6">
                                     <ul className="space-y-4 divide-y divide-neutral-800">
-                                        {foundPeers.map((comp, i) => (
+                                        {foundPeers.map((peer, i) => (
                                             <li key={i} className="flex flex-col sm:flex-row justify-between sm:items-center pt-4 first:pt-0">
                                                 <div>
-                                                    <p className="font-semibold text-neutral-100">{comp.name}</p>
-                                                    <a href={comp.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:underline truncate">{comp.url}</a>
+                                                    <p className="font-semibold text-neutral-100">{peer.name}</p>
+                                                    <a href={peer.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:underline truncate">{peer.url}</a>
                                                 </div>
-                                                <Button size="sm" onClick={() => handleAnalyzeFoundCompetitor(comp.url)} className="mt-2 sm:mt-0">
+                                                <Button size="sm" onClick={() => handleAnalyzeFoundPeer(peer.url)} className="mt-2 sm:mt-0">
                                                     Analisar
                                                 </Button>
                                             </li>
@@ -247,11 +247,11 @@ const CompetitorAnalyzer: React.FC<CompetitorAnalyzerProps> = ({ appContext, his
             <HistorySidebar
                 history={history}
                 onSelect={handleHistorySelect}
-                onDelete={(id) => appContext.removeFromHistory('competitor', id)}
-                onClear={() => appContext.clearHistory('competitor')}
+                onDelete={(id) => appContext.removeFromHistory('influence', id)}
+                onClear={() => appContext.clearHistory('influence')}
             />
         </div>
     );
 };
 
-export default CompetitorAnalyzer;
+export default InfluenceAnalyzer;

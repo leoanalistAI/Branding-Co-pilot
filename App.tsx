@@ -5,7 +5,7 @@ import FoundationAndPersonas from './components/tabs/FoundationAndPersonas';
 import ContentStudio from './components/tabs/ContentStudio';
 import MarketingBrainstorm from './components/tabs/MarketingBrainstorm';
 import EditorialCalendar from './components/tabs/EditorialCalendar';
-import CompetitorAnalyzer from './components/tabs/CompetitorAnalyzer';
+import InfluenceAnalyzer from './components/tabs/InfluenceAnalyzer';
 import VideoAnalyzer from './components/tabs/VideoAnalyzer';
 import SeoAssistant from './components/tabs/SeoAssistant';
 import ImageGenerator from './components/tabs/ImageGenerator';
@@ -34,7 +34,7 @@ type Tab =
     | 'contentStudio'
     | 'brainstorm'
     | 'calendar'
-    | 'competitor'
+    | 'influence'
     | 'video'
     | 'seo'
     | 'image';
@@ -270,7 +270,7 @@ const App: React.FC = () => {
         { type: 'button', id: 'seo', label: 'SEO Pessoal', icon: MagnifyingGlassIcon, component: <SeoAssistant appContext={appContext} history={getHistoryForTab('seo')} />, disabled: !isFoundationSet },
 
         { type: 'header', label: 'Mercado' },
-        { type: 'button', id: 'competitor', label: 'Análise de Mercado', icon: UsersIcon, component: <CompetitorAnalyzer appContext={appContext} history={getHistoryForTab('competitor')} />, disabled: !isFoundationSet },
+        { type: 'button', id: 'influence', label: 'Análise de Influência', icon: UsersIcon, component: <InfluenceAnalyzer appContext={appContext} history={getHistoryForTab('influence')} />, disabled: !isFoundationSet },
     ];
     
     if (appState === 'landing') {
