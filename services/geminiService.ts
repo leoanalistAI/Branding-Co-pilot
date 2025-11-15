@@ -357,7 +357,7 @@ export const findPeersService = (brandDna: BrandDna): Promise<GroundedResponse<F
         Use o Google Search para a pesquisa.
         DNA da Marca: ${JSON.stringify(brandDna, null, 2)}
 
-        O resultado deve ser um JSON com uma lista de objetos. NÃO adicione markdown.
+        O resultado deve ser um JSON com uma lista de objetos. Cada objeto deve conter o nome do influenciador/peer e a URL principal do seu perfil (LinkedIn, Instagram, Site, etc.). NÃO adicione markdown.
     `;
     return generateContentWithSchema<FoundCompetitor[]>(prompt, {
         type: Type.ARRAY,
