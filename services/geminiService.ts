@@ -294,7 +294,20 @@ export const createEditorialCalendarService = (
     const prompt = `
         Crie um calendário editorial com ${numPosts} posts sobre o tema "${theme}" para as plataformas: ${platforms.join(', ')}.
         ${contextPrompt}
-        O resultado deve ser um JSON com um objeto contendo uma chave "posts", que é uma lista de objetos. Para a data, use um formato relativo como "Dia 1", "Dia 2". NÃO adicione markdown.
+        O resultado deve ser um JSON com um objeto contendo uma chave "posts", que é uma lista de objetos. Para a data, use um formato relativo como "Dia 1", "Dia 2".
+        NÃO adicione markdown.
+
+        A estrutura do JSON deve ser:
+        {
+          "posts": [
+            {
+              "date": "string",
+              "platform": "string",
+              "topic": "string",
+              "contentIdea": "string"
+            }
+          ]
+        }
     `;
     return generateContentWithSchema<{ posts: EditorialCalendarPost[] }>(prompt, {
         type: Type.OBJECT,
