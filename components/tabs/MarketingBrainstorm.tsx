@@ -105,7 +105,7 @@ const MarketingBrainstorm: React.FC<MarketingBrainstormProps> = ({ appContext, h
                                         value={topic}
                                         onChange={(e) => setTopic(e.target.value)}
                                         className="w-full bg-neutral-900 text-neutral-200 p-2 rounded-lg border border-neutral-700 focus:ring-blue-500/50 focus:border-blue-500 focus:ring-2 transition-colors"
-                                        placeholder="Ex: Como conseguir os primeiros clientes de mentoria"
+                                        placeholder="Ex: Como construir autoridade no meu nicho"
                                         required
                                     />
                                 </div>
