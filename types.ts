@@ -36,11 +36,11 @@ export interface OptimizedProfile {
     };
 }
 
-export interface ProductIdea {
+export interface BrandingConcept {
     name: string;
     description: string;
-    targetAudience: string;
-    keyFeatures: string[];
+    audience: string;
+    keyComponents: string[];
 }
 
 export interface CopywritingResult {
